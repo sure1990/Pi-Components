@@ -1,5 +1,6 @@
 import { Gpio } from "onoff";
 import { Byte, ByteCollection } from "./byte";
+import sleep from "./sleep";
 
 export class ShiftRegister {
 
@@ -11,6 +12,10 @@ export class ShiftRegister {
         this.ser = new Gpio(dataPin, 'out');//SER PIN 14
         this.clock = new Gpio(clockPin, 'out'); //SRCLK PIN 11
         this.latch = new Gpio(latchPin, 'out'); //RCLK PIN12
+
+        this.latch.writeSync(0);
+        this.ser.writeSync(0);
+        this.clock.writeSync(0);
     }
 
     protected async WriteToRegister(byte: Byte) {
@@ -23,12 +28,9 @@ export class ShiftRegister {
     }
 
     async ShiftByte(byte: Byte) {
-        await this.latch.write(0);
-        await this.ser.write(0);
-        await this.clock.write(0);
         await this.WriteToRegister(byte);
-
         await this.latch.write(1);
+        await sleep(5);
         await this.latch.write(0);
     }
 
@@ -48,16 +50,13 @@ export class ShiftRegisters extends ShiftRegister {
         if (bytes.length != this.count) {
             throw new Error(`Byte size(${bytes.length})  doesn't match with the shiftregister count(${this.count})`)
         }
-        await this.latch.write(0);
-        await this.ser.write(0);
-        await this.clock.write(0);
-
-        for (let index = 0; index < bytes.length; index++) {
+        for (let index = 0; index < this.count; index++) {
             const byte = bytes[index];
             await this.WriteToRegister(byte);
         }
 
         await this.latch.write(1);
+        await sleep(5)
         await this.latch.write(0);
     }
 

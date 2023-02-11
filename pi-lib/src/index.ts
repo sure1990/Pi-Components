@@ -5,31 +5,38 @@ import sleep from './utils/sleep';
 
 const run = async () => {
 
-    const sr = new ShiftRegisters(21, 20, 16, 2);
+    const count = 4
+    const sr = new ShiftRegisters(21, 20, 16, count);
     await sr.reset();
+    await sleep(2000);
 
-    await sleep(5000);
+    var byte = new ByteCollection(count);
 
-    var byte = new ByteCollection(2);
-    byte.SetBit(1);
-    byte.SetBit(4);
-    byte.SetBit(6);
-    byte.SetBit(8);
-    byte.SetBit(10);
-    byte.SetBit(12);
-    byte.SetBit(15);
-    byte.SetBit(16);
 
-    for (let index = 0; index < byte.length; index++) {
-        const element = byte[index];
-        console.log(element.toString())
+    while (true) {
+        let bit = getRandomInt(count * 8);
+        if (bit === 0) break;
+        console.log('Bit(1)=>', bit);
+        byte.SetBit(bit);
+        sr.ShiftBytes(byte);
+        await sleep(50);
 
+        bit = getRandomInt(count * 8);
+        if (bit === 0) break;
+        console.log('Bit(0)=>', bit);
+        byte.ClearBit(bit);
+        sr.ShiftBytes(byte);
+        await sleep(50);
     }
-    await sr.ShiftBytes(byte);
 
-    await sleep(5000);
-    await sr.reset();
+
 }
+
+function getRandomInt(max: number) {
+    return Math.ceil(Math.random() * max);
+}
+
+
 
 run().then(() => console.log('done'))
 

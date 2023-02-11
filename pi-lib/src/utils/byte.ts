@@ -64,4 +64,12 @@ export class ByteCollection {
     public ClearBit(n: number) {
         this.byteCollection[this.GetIndex(n)].ClearBit(n);
     }
+
+    public toString() {
+        let str = '';
+        for (let index = 0; index < this.length; index++) {
+            str = str.concat(this[index].toString());
+        }
+        return str;
+    }
 }
