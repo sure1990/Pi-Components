@@ -1,0 +1,23 @@
+{
+  "name": "raspberrypi-gpio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./src/index.ts --inspect",
+    "start:run": "node ./dist/index.js",
+    "build": "tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "onoff": "^6.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.19",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
+    "tslib": "^2.5.0",
+    "typescript": "^4.9.5"
+  }
+}
