@@ -1,6 +1,7 @@
 import express from 'express';
 import http from 'http';
 import WebSocket from 'ws';
+import { MessageProcessor } from './message-processor';
 
 const app = express();
 
@@ -12,13 +13,14 @@ const wss = new WebSocket.Server({ 'server': httpServer });
 
 
 wss.on('connection', (ws) => {
+    const processor = new MessageProcessor(4)
 
     ws.on('close', () => {
         console.log(`Client disconnected`)
     })
-
     ws.on('message', (data: string) => {
-        console.log(data.toLocaleString());
+        processor.onMessage(data.toLocaleString())
+            .then(() => console.log(data.toLocaleString()));
     })
 
 });

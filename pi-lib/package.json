@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./src/index.ts --inspect",
+    "start": "nodemon ./src/server/server.ts --inspect",
     "start:run": "node ./dist/server/server.js",
-    "build": "tsc"
+    "build": "rimraf ./dist && tsc"
   },
   "author": "",
   "license": "ISC",
@@ -22,6 +22,7 @@
     "@types/websocket": "^1.0.5",
     "@types/ws": "^8.5.4",
     "nodemon": "^2.0.20",
+    "rimraf": "^4.1.2",
     "ts-node": "^10.9.1",
     "tslib": "^2.5.0",
     "typescript": "^4.9.5"
