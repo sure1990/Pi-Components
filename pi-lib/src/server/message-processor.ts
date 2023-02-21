@@ -13,13 +13,13 @@ export class MessageProcessor {
 
     async onMessage(msg: string) {
         const [pin, state] = msg.split('|');
-        console.log('PIN: ', pin);
-        console.log('STATE: ', state);
-        if (state == "1")
-            this.byte.SetBit(+pin);
-        else
-            this.byte.ClearBit(+pin);
-        await this.sr.ShiftBytes(this.byte);
+        if (pin && state) {
+            if (state == "1")
+                this.byte.SetBit(+pin);
+            else
+                this.byte.ClearBit(+pin);
+            await this.sr.ShiftBytes(this.byte);
+        }
     }
 
 }

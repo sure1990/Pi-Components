@@ -62,7 +62,9 @@ export class ByteCollection {
     }
 
     public ClearBit(n: number) {
-        this.byteCollection[this.GetIndex(n)].ClearBit(n);
+        const index = this.GetIndex(n);//index in the byte collection
+        const nthBit = n - 1 - (index * this.byteSize); //0 based bit position
+        this.byteCollection[index].ClearBit(nthBit);
     }
 
     public toString() {
