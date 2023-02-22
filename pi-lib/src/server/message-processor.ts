@@ -1,23 +1,25 @@
 import { ByteCollection } from "../utils/byte";
 import { ShiftRegisters } from "../utils/shift-register";
+import srMapping from "./sr-mapping";
+import { PinState } from "./types";
 
 
 export class MessageProcessor {
     private readonly sr: ShiftRegisters;
     private readonly byte: ByteCollection
-    constructor(count: number) {
-        this.sr = new ShiftRegisters(21, 20, 16, count);
-        this.byte = new ByteCollection(count);
+    constructor(groupName: string) {
+        this.sr = srMapping[groupName].sr;
+        this.byte = srMapping[groupName].bytes;
         this.sr.reset();
     }
 
     async onMessage(msg: string) {
-        const [pin, state] = msg.split('|');
-        if (pin && state) {
-            if (state == "1")
-                this.byte.SetBit(+pin);
+        const { Pin, State } = JSON.parse(msg) as PinState;
+        if (Pin && State) {
+            if (State)
+                this.byte.SetBit(Pin);
             else
-                this.byte.ClearBit(+pin);
+                this.byte.ClearBit(Pin);
             await this.sr.ShiftBytes(this.byte);
         }
     }
