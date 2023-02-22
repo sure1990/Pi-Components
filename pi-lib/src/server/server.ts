@@ -17,7 +17,7 @@ const Group_Split = 32;
 wss.on('connection', async (ws) => {
     // const processor = new MessageProcessor(4)
 
-    const mq = new MessageQ('amqp://guest:guest@vrtdesignspi.local:5672');
+    const mq = new MessageQ('amqp://localhost');
     await mq.CreateChannel('amq.direct');
     mq.BindQueue('G1', 'Group_1')
     mq.BindQueue('G2', 'Group_2')
