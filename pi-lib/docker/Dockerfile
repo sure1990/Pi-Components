@@ -2,9 +2,11 @@ FROM node:lts-alpine3.17
 
 
 # Create app directory
-WORKDIR /usr/src/app
+WORKDIR /usr/app
 
-COPY package*.json ./
+RUN chown -R node:node /usr/app
+
+COPY ../package*.json ./
 
 RUN  apk add --no-cache --virtual g++ make py3-pip
 RUN npm install --omit=dev

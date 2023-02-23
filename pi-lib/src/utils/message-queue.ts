@@ -18,7 +18,7 @@ export class MessageQ {
             await this.Connect();
         }
 
-        this._exchangeName=exchange;
+        this._exchangeName = exchange;
         this._channel = await this._connection?.createChannel();
         //await this._channel?.assertExchange(exchange, 'direct', { durable: false });
     }
@@ -33,13 +33,13 @@ export class MessageQ {
     }
 
 
-    public Consume(queueName: string, OnMessage: (msg: string) => Promise<void>) {
+    public async Consume(queueName: string, processor: IMessageProcessor) {
         if (this._channel == undefined) {
             throw new Error("Channel not initialized !!!");
         }
-
+        await this._channel.assertQueue(queueName, { durable: true });
         this._channel.consume(queueName, async (msg) => {
-            await OnMessage(msg?.content.toString('utf-8') as string)
+            await processor.OnMessage(msg?.content.toString('utf-8') as string)
             this._channel?.ack(msg as Message);
         }, { noAck: false })
 
@@ -52,4 +52,15 @@ export class MessageQ {
 
         this._channel.publish(this._exchangeName, routingKey, Buffer.from(message, 'utf8'));
     }
+
+    public async Close() {
+        await this._channel?.close();
+        await this._connection?.close();
+        this._channel = undefined;
+        this._connection = undefined;
+    }
+}
+
+export interface IMessageProcessor {
+    OnMessage(msg: string): Promise<void>;
 }

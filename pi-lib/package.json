@@ -4,14 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./src/server/server.ts --inspect",
-    "start:server": "node ./dist/server/server.js",
+    "start": "nodemon ./src/server/consumer/server.ts --inspect",
+    "start:server-ws": "node ./dist/server/web-socket/server.js",
+    "start:server-consumer": "node ./dist/server/consumer/server.js",
+    "start:server": "concurrently 'npm:start:server-*'",
     "build": "rimraf ./dist && tsc"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "amqplib": "^0.10.3",
+    "concurrently": "^7.6.0",
     "express": "^4.18.2",
     "onoff": "^6.0.3",
     "websocket": "^1.0.34",

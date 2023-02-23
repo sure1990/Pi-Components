@@ -1,0 +1,11 @@
+{
+    "ShiftRegister": {
+        "Group_Split": 32
+    },
+    "Queue": {
+        "Bindings": {
+            "G1": "Group_1",
+            "G2": "Group_2"
+        }
+    }
+}
