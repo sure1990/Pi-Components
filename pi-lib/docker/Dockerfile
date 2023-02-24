@@ -1,21 +1,15 @@
-FROM node:lts-alpine3.17
-
-
-# Create app directory
-WORKDIR /usr/app
-
-RUN chown -R node:node /usr/app
-
-COPY ../package*.json ./
-
-RUN  apk add --no-cache --virtual g++ make py3-pip
-RUN npm install --omit=dev
-RUN apk del .gyp
-
-# Bundle app source
-COPY . .
+FROM node:18-alpine
+RUN apk add g++ make py3-pip
 
 EXPOSE 9000
 
+ENV NODE_ENV=production
+WORKDIR /app
 
-CMD [ "node", "server/server.js" ]
+COPY ["package.json", "./"]
+
+RUN npm install --production
+
+COPY . .
+
+CMD ["node", "./server/web-socket/server.js"]
