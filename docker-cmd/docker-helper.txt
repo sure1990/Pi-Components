@@ -1,0 +1,16 @@
+
+TO BUILD DOCKER IMAGES
+docker build -t websocket-server -f docker/listener/Dockerfile .
+docker build -t shiftregister-driver -f docker/consumer/Dockerfile .
+
+TO CREATE A BRIDGE NETWORK (ADD ALL CONTAINERS INTO THIS NETWORK)
+docker network create mf-net
+
+RUN RABBITMQ CONTAINER
+docker run -d --name vrtdesigns-mq --net mf-net --restart unless-stopped -p 15672:15672 -p 5672:5672 rabbitmq:management-alpine
+
+RUN LISTENER(WEB SOCKET) CONTAINER
+docker run -d --name websocket-server --net mf-net --restart unless-stopped -p 9000:9000 websocket-server
+
+RUN CONSUMER(SHIFT REGISTER DRIVER) CONTAINER
+docker run -d --privileged --name shiftregister-driver --net mf-net --restart unless-stopped shiftregister-driver

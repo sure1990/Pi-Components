@@ -6,10 +6,10 @@ EXPOSE 9000
 ENV NODE_ENV=production
 WORKDIR /app
 
-COPY ["package.json", "./"]
+COPY ["./package.json", "./"]
 
-RUN npm install --production
+RUN npm install --omit=dev
 
 COPY . .
 
-CMD ["node", "./server/web-socket/server.js"]
+CMD ["node", "./server/consumer/server.js"]
