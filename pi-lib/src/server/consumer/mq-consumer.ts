@@ -3,7 +3,7 @@ import config from '../../config/shared.config.json';
 import { ShiftRegisterDriver } from "./shift-register.driver";
 
 const initialize = async () => {
-    const mq = new MessageQ('amqp://localhost');
+    const mq = new MessageQ('amqp://vrtdesigns-mq');
     await mq.CreateChannel('amq.direct');
     return mq;
 }

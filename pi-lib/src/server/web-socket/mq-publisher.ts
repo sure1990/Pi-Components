@@ -3,7 +3,7 @@ import { PinState } from "../types";
 import config from '../../config/shared.config.json';
 
 const initialize = async () => {
-    const mq = new MessageQ('amqp://localhost');
+    const mq = new MessageQ('amqp://vrtdesigns-mq');
     await mq.CreateChannel('amq.direct');
     await createBindings(mq);
     return mq;
