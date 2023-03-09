@@ -16,18 +16,13 @@ const useKeyListener = () => {
         })
     }
 
-    useEffect(() => {
-
-
-
-    }, [keyTrack])
 
     const handleKeyDown = useCallback((event: KeyboardEvent) => {
         const { key } = event;
         console.log(key, GetAscii(key));
         const track = keyTrackRef.current[key];
         if (track === undefined || track === 0) {
-            PiService.On(GetAscii(key) - 64)
+            // PiService.On(GetAscii(key) - 64)
             setKeyTrack({ [key]: 1 })
         }
     }, []);
@@ -36,7 +31,7 @@ const useKeyListener = () => {
         const { key } = event;
 
         if (keyTrackRef.current[key] != undefined) {
-            PiService.Off(GetAscii(key) - 64)
+            // PiService.Off(GetAscii(key) - 64)
             setKeyTrack({ [key]: 0 })
         }
     }, []);

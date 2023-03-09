@@ -26,4 +26,4 @@
  * ```
  */
 
-import './core-app/index'
+import "./core-app/index";
