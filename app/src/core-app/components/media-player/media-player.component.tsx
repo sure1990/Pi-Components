@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react";
+import moment from "moment";
 import { AudioPlayer } from "../../lib/audio";
 import MediaPlayerProgress from "./media-player-progress.component";
 
 import "./media-player.component.css";
+import MediaPlayerButtons from "./media-player-buttons.component";
 
 let player: AudioPlayer;
 
 type MediaPlayerProps = {
   src: string;
+  onPlayPause?: (paused: boolean) => void;
+  onTimeChange?(time: number): void;
 };
 
 const MediaPlayer = (props: MediaPlayerProps) => {
-  const { src } = props;
+  const { src, onPlayPause, onTimeChange } = props;
   useEffect(() => {
     player = new AudioPlayer(src);
     player.OnPlay = () => setIsPaused(false);
@@ -24,6 +28,20 @@ const MediaPlayer = (props: MediaPlayerProps) => {
   const [totalTime, setTotalTime] = useState(0);
   const [isPaused, setIsPaused] = useState(true);
 
+  useEffect(() => {
+    if (currentTime === totalTime) {
+      setIsPaused(true);
+    }
+  }, [totalTime, currentTime]);
+
+  useEffect(() => {
+    if (onPlayPause) onPlayPause(isPaused);
+  }, [isPaused]);
+
+  useEffect(() => {
+    if (onTimeChange) onTimeChange(currentTime);
+  }, [currentTime]);
+
   const handlePlayPause = () => {
     if (isPaused) player.Play();
     else player.Pause();
@@ -35,39 +53,27 @@ const MediaPlayer = (props: MediaPlayerProps) => {
 
   return (
     <div className="border border-info">
-      <div className="text-center">
-        <div className="btn-group p-2">
-          <button className="btn btn-sm btn-info" type="button">
-            Reverse
-          </button>
-          <button
-            className="btn btn-sm btn-success"
-            type="button"
-            onClick={handlePlayPause}
-          >
-            {isPaused ? "PLAY" : "PAUSE"}
-          </button>
-          <button
-            className="btn btn-sm btn-danger"
-            type="button"
-            onClick={handleStop}
-          >
-            Stop
-          </button>
-          <button className="btn btn-sm btn-info" type="button">
-            Forward
-          </button>
-        </div>
-      </div>
+      <MediaPlayerButtons
+        onPlayPause={handlePlayPause}
+        onStop={handleStop}
+        isPaused={isPaused}
+      />
       <div className="d-flex flex-column progress-container">
-        <MediaPlayerProgress />
+        <MediaPlayerProgress
+          CurrentTime={currentTime}
+          TotalDuration={totalTime}
+        />
       </div>
-      <div className="duration-container">
-        <div className="float-left">
-          <span className="badge badge-pill badge-secondary">Secondary</span>
+      <div className="d-flex">
+        <div className="mr-auto p-2">
+          <span className="badge badge-pill badge-secondary">
+            {formatted(currentTime)}
+          </span>
         </div>
-        <div className="float-right">
-          <span className="badge badge-pill badge-secondary">Secondary</span>
+        <div className="p-2">
+          <span className="badge badge-pill badge-secondary">
+            {formatted(totalTime)}
+          </span>
         </div>
       </div>
     </div>
@@ -75,3 +81,6 @@ const MediaPlayer = (props: MediaPlayerProps) => {
 };
 
 export default MediaPlayer;
+
+const formatted = (seconds: number) =>
+  moment.utc(seconds * 1000).format("mm:ss");

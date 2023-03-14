@@ -33,8 +33,6 @@ const useKeyListener = () => {
     }
   }, []);
 
-  useState(() => console.log(keyTrack), [keyTrack]);
-
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("keyup", handleKeyUp);
