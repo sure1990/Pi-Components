@@ -33,17 +33,21 @@ const useKeyListener = () => {
     }
   }, []);
 
-  useEffect(() => {
+  const addHandler = () => {
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("keyup", handleKeyUp);
+  };
 
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keyup", handleKeyUp);
-    };
+  const removeHandler = () => {
+    document.removeEventListener("keydown", handleKeyDown);
+    document.removeEventListener("keyup", handleKeyUp);
+  };
+
+  useEffect(() => {
+    return () => removeHandler();
   }, []);
 
-  return keyTrack;
+  return { keyTrack, addHandler, removeHandler };
 };
 
 function GetAscii(key: string) {

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useKeyListener } from "../../hooks";
 import KeyProgress from "./key-progress.component";
 type MusicMapperProps = {
@@ -6,7 +7,15 @@ type MusicMapperProps = {
 
 const MusicMapper = (props: MusicMapperProps) => {
   const { isPaused } = props;
-  const keyTrack =  useKeyListener();
+  const { keyTrack, addHandler, removeHandler } = useKeyListener();
+
+  useEffect(() => {
+    if (isPaused) {
+      removeHandler();
+    } else {
+      addHandler();
+    }
+  }, [isPaused]);
 
   return (
     <div className="d-flex flex-column">
