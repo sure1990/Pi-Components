@@ -11,7 +11,7 @@ let player: AudioPlayer;
 type MediaPlayerProps = {
   src: string;
   onPlayPause?: (paused: boolean) => void;
-  onTimeChange?(time: number): void;
+  onTimeChange?(time: number, totalTime: number): void;
 };
 
 const MediaPlayer = (props: MediaPlayerProps) => {
@@ -39,8 +39,8 @@ const MediaPlayer = (props: MediaPlayerProps) => {
   }, [isPaused]);
 
   useEffect(() => {
-    if (onTimeChange) onTimeChange(currentTime);
-  }, [currentTime]);
+    if (onTimeChange) onTimeChange(currentTime, totalTime);
+  }, [currentTime, totalTime]);
 
   const handlePlayPause = () => {
     if (isPaused) player.Play();

@@ -8,10 +8,23 @@ const App = () => {
   const url = window.URL.createObjectURL(blob);
 
   const [paused, setPaused] = useState(true);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [totalTime, setTotalTime] = useState(0);
   return (
     <>
-      <MediaPlayer src={url} onPlayPause={(paused) => setPaused(paused)} />
-      <MusicMapper isPaused={paused} />
+      <MediaPlayer
+        src={url}
+        onPlayPause={(paused) => setPaused(paused)}
+        onTimeChange={(time, duration) => {
+          setCurrentTime(time);
+          setTotalTime(duration);
+        }}
+      />
+      <MusicMapper
+        isPaused={paused}
+        currentTime={currentTime}
+        totalTime={totalTime}
+      />
     </>
   );
 };

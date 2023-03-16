@@ -1,7 +1,15 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import PiService from "../services/pi.service";
 
-const useKeyListener = () => {
+type KeyListenerProps = {
+  onPress: (key: string) => void;
+  onRelease: (key: string) => void;
+};
+
+const useKeyListener = (
+  onPress: (key: string) => void,
+  onRelease: (key: string) => void
+) => {
   const [keyTrack, _setKeyTrack] = useState<{ [key: string]: number }>({});
 
   const keyTrackRef = useRef(keyTrack);
@@ -16,11 +24,12 @@ const useKeyListener = () => {
 
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
     const { key } = event;
-    console.log(key, GetAscii(key));
+
     const track = keyTrackRef.current[key];
     if (track === undefined || track === 0) {
       // PiService.On(GetAscii(key) - 64)
       setKeyTrack({ [key]: 1 });
+      onPress(key);
     }
   }, []);
 
@@ -30,6 +39,7 @@ const useKeyListener = () => {
     if (keyTrackRef.current[key] != undefined) {
       // PiService.Off(GetAscii(key) - 64)
       setKeyTrack({ [key]: 0 });
+      onRelease(key);
     }
   }, []);
 
@@ -47,7 +57,7 @@ const useKeyListener = () => {
     return () => removeHandler();
   }, []);
 
-  return { keyTrack, addHandler, removeHandler };
+  return { addHandler, removeHandler };
 };
 
 function GetAscii(key: string) {

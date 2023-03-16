@@ -1,13 +1,14 @@
-import React from "react";
+import { Frame } from "./types";
 
 type KeyProgressProps = {
   KeyCode: string;
+  Frames: Frame[];
 };
 const KeyProgress = (props: KeyProgressProps) => {
   const { KeyCode } = props;
   return (
-    <div>
-      Progress:<span>{KeyCode}</span>
+    <div className="progress">
+      <div className="progress-bar">{KeyCode}</div>
     </div>
   );
 };
