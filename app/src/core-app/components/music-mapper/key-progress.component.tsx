@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Frame } from "./types";
 
 type KeyProgressProps = {
@@ -5,10 +6,18 @@ type KeyProgressProps = {
   Frames: Frame[];
 };
 const KeyProgress = (props: KeyProgressProps) => {
-  const { KeyCode } = props;
+  const { KeyCode, Frames } = props;
   return (
     <div className="progress">
-      <div className="progress-bar">{KeyCode}</div>
+      {Frames.map((frame, index) => (
+        <div
+          key={index}
+          className="progress-bar"
+          style={{ width: `${frame.Width}%` }}
+        >
+          {KeyCode}
+        </div>
+      ))}
     </div>
   );
 };
