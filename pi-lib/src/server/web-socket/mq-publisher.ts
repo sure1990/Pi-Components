@@ -8,11 +8,9 @@ const initialize = async () => {
     await createBindings(mq);
     return mq;
 }
-
-
 const publish = (data: string, mq: MessageQ) => {
     const [pinNo, state] = data.split('|');
-    const groupNo = Math.ceil((+pinNo) / 32);
+    const groupNo = Math.ceil((+pinNo) / config.ShiftRegister.Group_Split);
     const msg: PinState = { Pin: mapPinToGroup(groupNo, +pinNo), State: state === '1' }
     mq.Publish(JSON.stringify(msg), `Group_${groupNo}`)
 }
