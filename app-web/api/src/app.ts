@@ -1,4 +1,3 @@
-import express from "express";
 import "reflect-metadata";
 import path from "path";
 import { createExpressServer } from "routing-controllers";
@@ -10,4 +9,6 @@ const app = createExpressServer({
 });
 
 // run express application on port 3000
-app.listen(3001);
+app.listen(3001, () => {
+  console.log("APP Listening at PORT 3001");
+});
