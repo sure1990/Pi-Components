@@ -9,6 +9,6 @@ export const getQuery = (
   return `
   ${statement}
   VALUES
-  ${placeholders.join(" ")}
+  ${placeholders.join(",")}
   `;
 };

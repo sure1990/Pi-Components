@@ -7,9 +7,10 @@ import path from "path";
 export class OutputPinController {
   @Post()
   public async CreateMap(@Body() reqBody: ICreateMapRequest) {
+    let db: SQLiteDb | null = null;
     try {
       const { Key, PinNo } = reqBody;
-      const db = new SQLiteDb(path.resolve("./database/app-db.db"));
+      db = new SQLiteDb(path.resolve("./database/app-db.db"));
       const result = await db.Insert(
         "tblPinMapping",
         ["PinNo", "Key"],
@@ -20,19 +21,29 @@ export class OutputPinController {
     } catch (error) {
       console.error(error);
       return 0;
+    } finally {
+      if (db) {
+        db.Close();
+      }
     }
   }
 
   @Get()
   public async GetAll() {
+    let db: SQLiteDb | null = null;
     try {
-      const db = new SQLiteDb(path.resolve("./database/app-db.db"));
+      db = new SQLiteDb(path.resolve("./database/app-db.db"));
       return await db.SelectAll<IPinMapping>(`
       SELECT PinNo,Key FROM tblPinMapping
+      ORDER BY PinNo
       `);
     } catch (error) {
       console.error(error);
       return [];
+    } finally {
+      if (db) {
+        db.Close();
+      }
     }
   }
 }

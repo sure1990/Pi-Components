@@ -8,7 +8,11 @@ export class SQLiteDb {
   }
 
   public Close() {
-    this._db.close();
+    try {
+      if (this._db) this._db.close();
+    } catch (error) {
+      throw error;
+    }
   }
 
   public async Insert(
@@ -17,6 +21,7 @@ export class SQLiteDb {
     values: any[][]
   ): Promise<number> {
     const query = getQuery(tableName, columns, values);
+    console.log(query);
     const result = await new Promise<number>((resolve, reject) => {
       this._db.run(
         query,
