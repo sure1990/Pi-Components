@@ -1,14 +1,12 @@
 import Container from "react-bootstrap/Container";
 import "./App.scss";
-import "../assets/icons/style.css";
-import AudioPlayer from "./audio-player/audio-player.component";
-import ProgressPlayer from "./progress-player/progress-player.component";
+import "bootstrap/dist/css/bootstrap.min.css";
+import MediaPlayer from "./shared/media-player";
 function App() {
   return (
-    <>
-      <AudioPlayer />
-      <ProgressPlayer />
-    </>
+    <Container>
+      <MediaPlayer />
+    </Container>
   );
 }
 
