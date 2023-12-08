@@ -1,4 +1,8 @@
-const ButtonToolbar = () => {
+import { FC } from "react";
+
+type ButtonToolbarProps = {};
+
+const ButtonToolbar: FC<ButtonToolbarProps> = () => {
   return (
     <div className="btn-group">
       <button type="button" className="btn btn-sm btn-warning">
