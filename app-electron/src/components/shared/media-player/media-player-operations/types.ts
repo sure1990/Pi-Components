@@ -1,6 +1,15 @@
 export type MediaPlayerState = {
   IsReady: boolean;
+  PlayerState: PlayerStateEnum;
+  Duration: number;
+  CurrentPosition: number;
 };
+
+export enum PlayerStateEnum {
+  PLAYING,
+  PAUSED,
+  STOPPED,
+}
 
 export type MediaPlayerAction = {
   type: MediaPlayerActionType;
@@ -9,4 +18,9 @@ export type MediaPlayerAction = {
 
 export enum MediaPlayerActionType {
   INITIALIZATION_DONE,
+  STOP,
+  PAUSE,
+  PLAY,
+  UPDATE_TIME,
+  ENDED,
 }
