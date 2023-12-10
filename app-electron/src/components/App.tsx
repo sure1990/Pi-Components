@@ -1,8 +1,9 @@
 import Container from "react-bootstrap/Container";
+import MediaPlayer from "./shared/media-player";
+import { MediaStatusProvider } from "./shared/media-player";
+
 import "./App.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
-import MediaPlayer from "./shared/media-player";
-import { MediaStatusProvider } from "./shared/media-status";
 function App() {
   return (
     <Container>

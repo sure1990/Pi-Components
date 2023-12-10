@@ -2,9 +2,9 @@ import { useContext } from "react";
 import MediaStatusContext from "./media-status.context";
 
 const useMediaStatus = () => {
-  const {} = useContext(MediaStatusContext);
+  const { CurrentTime, IsPlaying } = useContext(MediaStatusContext);
 
-  return {};
+  return { CurrentTime, IsPlaying };
 };
 
 export default useMediaStatus;

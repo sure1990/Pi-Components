@@ -6,14 +6,8 @@ import "./media-player.component.scss";
 import Progress from "./progress/progress.component";
 
 const MediaPlayer = () => {
-  const {
-    IsReady,
-
-    TotalDuration,
-    CurrentPosition,
-    PlayPause,
-    StopPlayback,
-  } = useMediaPlayerOperations(sampleMp3);
+  const { IsReady, TotalDuration, CurrentPosition, PlayPause, StopPlayback } =
+    useMediaPlayerOperations(sampleMp3);
 
   return (
     <div className="container">

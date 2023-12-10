@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useRef } from "react";
+import { useCallback, useContext, useEffect, useReducer, useRef } from "react";
 import MediaPlayerOperationsReducer from "./media-player-operations.reducer";
 import { MediaPlayerState, PlayerStateEnum } from "./types";
 import {
@@ -9,6 +9,7 @@ import {
   Stop,
   UpdateTime,
 } from "./media-player-action-creators";
+import MediaStatusContext from "../media-status-provider/media-status.context";
 
 const INITIAL_STATE: MediaPlayerState = {
   IsReady: false,
@@ -24,6 +25,16 @@ const useMediaPlayerOperations = (src: string) => {
   );
   const { IsReady, PlayerState, Duration, CurrentPosition } = state;
   const audioRef = useRef(new Audio(src));
+  const { UpdateTime: UpdateTimeToCtx, UpdateMediaStatus } =
+    useContext(MediaStatusContext);
+
+  useEffect(() => {
+    UpdateTimeToCtx(CurrentPosition);
+  }, [CurrentPosition, UpdateTimeToCtx]);
+
+  useEffect(() => {
+    UpdateMediaStatus(PlayerState === PlayerStateEnum.PLAYING);
+  }, [PlayerState, UpdateMediaStatus]);
 
   const PlayPause = useCallback(() => {
     const { current: audio } = audioRef;

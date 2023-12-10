@@ -1,4 +1,4 @@
-import React, { FC, memo, useEffect, useState } from "react";
+import { FC, memo } from "react";
 
 import { DateTimeUtils } from "../../../../utilities";
 type ProgressProps = { total: number; current: number };
