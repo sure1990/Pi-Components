@@ -1,6 +1,6 @@
 import KeyFrames from "./key-frames/key-frames.component";
 import { useMediaStatus } from "../shared/media-player";
-import useKeyPressTracker from "../shared/key-press-tracker/key-press-tracker.hook";
+import useKeyPressTracker from "../shared/key-press-tracker";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { KeyFrame } from "./types";
 

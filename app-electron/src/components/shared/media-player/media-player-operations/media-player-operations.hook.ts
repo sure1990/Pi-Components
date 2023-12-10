@@ -44,6 +44,7 @@ const useMediaPlayerOperations = (src: string) => {
   }, [PlayerState, UpdateMediaStatus]);
 
   const PlayPause = useCallback(() => {
+    window.focus();
     const { current: audio } = audioRef;
     if (PlayerState === PlayerStateEnum.PLAYING) {
       audio.pause();
