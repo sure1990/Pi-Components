@@ -1,16 +1,27 @@
 import ProgressBar from "react-bootstrap/ProgressBar";
 import "./key-frames.component.scss";
+import { FC } from "react";
+import { KeyFrame } from "../types";
 
-const KeyFrames = () => {
+type KeyFramesProps = {
+  max: number;
+  frames: KeyFrame[];
+  current: number;
+  map: string;
+};
+
+const KeyFrames: FC<KeyFramesProps> = ({ frames, max, current, map }) => {
   return (
-    <ProgressBar>
-      {CreateFrame("1", 50, 25, undefined, "bg-none")}
-      {CreateFrame("2", 50, 25)}
-      {/* {CreateFrame("2", 10, "danger")}
-      {CreateFrame("3", 20)}
-      {CreateFrame("4", 20, "bg-none")}
-      {CreateFrame("5", 10, "warning")}
-      {CreateFrame("6", 10, undefined, "bg-none")} */}
+    <ProgressBar className="mt-2">
+      {frames.map((f, index) => {
+        return CreateFrame(
+          `${map}_${index}`,
+          max,
+          GetProgress(f.start, f.end ?? current),
+          GetVariant(f.isNone),
+          GetClassName(f.isNone)
+        );
+      })}
     </ProgressBar>
   );
 };
@@ -31,6 +42,18 @@ function CreateFrame(
       max={max}
     />
   );
+}
+
+function GetProgress(start: number, end: number) {
+  return end - start;
+}
+
+function GetVariant(isNone: boolean) {
+  return !isNone ? "success" : undefined;
+}
+
+function GetClassName(isNone: boolean) {
+  return isNone ? "bg-none" : undefined;
 }
 
 export default KeyFrames;

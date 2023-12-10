@@ -3,6 +3,7 @@ import MediaStatusContext from "./media-status.context";
 
 const MediaStatusProvider: FC<PropsWithChildren> = ({ children }) => {
   const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [isPlaying, setisPlaying] = useState(false);
 
   return (
@@ -10,8 +11,10 @@ const MediaStatusProvider: FC<PropsWithChildren> = ({ children }) => {
       value={{
         CurrentTime: currentTime,
         IsPlaying: isPlaying,
+        Duration: duration,
         UpdateMediaStatus: setisPlaying,
         UpdateTime: setCurrentTime,
+        UpdateDuration: setDuration,
       }}
     >
       {children}

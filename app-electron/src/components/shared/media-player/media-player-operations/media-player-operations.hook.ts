@@ -25,12 +25,19 @@ const useMediaPlayerOperations = (src: string) => {
   );
   const { IsReady, PlayerState, Duration, CurrentPosition } = state;
   const audioRef = useRef(new Audio(src));
-  const { UpdateTime: UpdateTimeToCtx, UpdateMediaStatus } =
-    useContext(MediaStatusContext);
+  const {
+    UpdateTime: UpdateTimeToCtx,
+    UpdateMediaStatus,
+    UpdateDuration,
+  } = useContext(MediaStatusContext);
 
   useEffect(() => {
     UpdateTimeToCtx(CurrentPosition);
   }, [CurrentPosition, UpdateTimeToCtx]);
+
+  useEffect(() => {
+    UpdateDuration(Duration);
+  }, [Duration, UpdateDuration]);
 
   useEffect(() => {
     UpdateMediaStatus(PlayerState === PlayerStateEnum.PLAYING);
