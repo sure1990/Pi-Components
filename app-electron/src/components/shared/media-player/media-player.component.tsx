@@ -1,4 +1,3 @@
-import { useCallback, useEffect } from "react";
 import sampleMp3 from "../../../assets/temp/sample-audio";
 import ButtonToolbar from "./button-toolbar/button-toolbar.component";
 import useMediaPlayerOperations from "./media-player-operations";
@@ -10,7 +9,7 @@ const MediaPlayer = () => {
     useMediaPlayerOperations(sampleMp3);
 
   return (
-    <div className="container">
+    <>
       <div className="row">
         <div className="col-md progress-container">
           <Progress total={TotalDuration} current={CurrentPosition} />
@@ -25,7 +24,7 @@ const MediaPlayer = () => {
           />
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
