@@ -15,7 +15,11 @@ const MediaPlayerOperationsReducer = (
   switch (type) {
     case MediaPlayerActionType.INITIALIZATION_DONE:
       const { duration } = payload;
-      updatedState = { ...state, IsReady: true, Duration: duration ?? 0 };
+      updatedState = {
+        ...state,
+        IsReady: true,
+        Duration: (duration ?? 0).toFixed(5),
+      };
       break;
     case MediaPlayerActionType.PLAY:
       updatedState = { ...state, PlayerState: PlayerStateEnum.PLAYING };
@@ -38,7 +42,7 @@ const MediaPlayerOperationsReducer = (
       break;
     case MediaPlayerActionType.UPDATE_TIME:
       const { time } = payload;
-      updatedState = { ...state, CurrentPosition: time };
+      updatedState = { ...state, CurrentPosition: time.toFixed(5) };
       break;
     default:
       updatedState = { ...state };

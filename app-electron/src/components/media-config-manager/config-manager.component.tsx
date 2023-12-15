@@ -3,6 +3,7 @@ import { useMediaStatus } from "../shared/media-player";
 import useKeyPressTracker from "../shared/key-press-tracker";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { KeyFrame } from "./types";
+import FrameUtils from "../shared/utilities/frame.utils";
 
 const ConfigManager = () => {
   const { IsPlaying, CurrentTime, Duration } = useMediaStatus();
@@ -17,33 +18,21 @@ const ConfigManager = () => {
 
   const onKeyDown = useCallback((key: string) => {
     setKeys((prev) => {
-      const current = currentTimeRef.current;
       const updated = { ...prev };
-      if (updated[key] === undefined) {
-        updated[key] = [{ start: 0, end: current, isNone: true }];
-      }
-
-      const frames = [...updated[key]];
-      const lastFrame = frames[frames.length - 1];
-      if (lastFrame.isNone) {
-        lastFrame.end = current;
-      }
-      frames.push({ start: current, isNone: false });
-
-      updated[key] = frames;
+      updated[key] = FrameUtils.StartFrame(
+        currentTimeRef.current,
+        updated[key] ?? []
+      );
       return updated;
     });
   }, []);
+
   const onKeyUp = useCallback((key: string) => {
     setKeys((prev) => {
       const current = currentTimeRef.current;
       const updated = { ...prev };
       if (updated[key]) {
-        const frames = [...updated[key]];
-        const lastFrame = frames[frames.length - 1];
-        frames[frames.length - 1] = { ...lastFrame, end: current };
-        frames.push({ start: current, isNone: true });
-        updated[key] = frames;
+        updated[key] = FrameUtils.EndFrame(current, updated[key]);
       }
       return updated;
     });

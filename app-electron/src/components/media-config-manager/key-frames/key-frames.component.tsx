@@ -1,7 +1,8 @@
 import ProgressBar from "react-bootstrap/ProgressBar";
 import "./key-frames.component.scss";
-import { FC } from "react";
+import { FC, memo } from "react";
 import { KeyFrame } from "../types";
+import FrameUtils from "../../shared/utilities/frame.utils";
 
 type KeyFramesProps = {
   max: number;
@@ -11,9 +12,20 @@ type KeyFramesProps = {
 };
 
 const KeyFrames: FC<KeyFramesProps> = ({ frames, max, current, map }) => {
+  console.log(
+    "ReArrangeFrames",
+    FrameUtils.ReArrangeFrames(
+      frames.map((x) => ({ ...x, end: x.end ?? current })),
+      max
+    ),
+    frames
+  );
   return (
     <ProgressBar className="mt-2">
-      {frames.map((f, index) => {
+      {FrameUtils.ReArrangeFrames(
+        frames.map((x) => ({ ...x, end: x.end ?? current })),
+        max
+      ).map((f, index) => {
         return CreateFrame(
           `${map}_${index}`,
           max,
@@ -56,4 +68,8 @@ function GetClassName(isNone: boolean) {
   return isNone ? "bg-none" : undefined;
 }
 
-export default KeyFrames;
+export default memo(KeyFrames, (prev, next) => {
+  return (
+    prev.frames === next.frames && !next.frames.some((x) => x.end === undefined)
+  );
+});
