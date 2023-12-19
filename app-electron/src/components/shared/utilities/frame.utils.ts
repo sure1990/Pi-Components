@@ -1,24 +1,5 @@
 import { KeyFrame } from "../../media-config-manager/types";
-
-// function StartFrame(startTime: number, frames?: KeyFrame[]) {
-//   if (frames === undefined) {
-//     frames = [
-//       { start: 0, end: startTime, isNone: true },
-//       { start: startTime, isNone: false },
-//     ];
-//   } else {
-//     //Start Frames by start time
-//     frames.sort((a, b) => a.start - b.start);
-
-//     const lastFrame = frames[frames.length - 1];
-//     if (lastFrame.isNone) {
-//       lastFrame.end = startTime;
-//     }
-//     frames.push({ start: startTime, isNone: false });
-//   }
-
-//   return frames;
-// }
+import Utils from "./utils";
 
 function startFrame(start: number, frames: KeyFrame[]) {
   return [...frames, { start, isNone: false }];
@@ -61,9 +42,15 @@ function findMissingRanges(start: number, end: number, ranges: KeyFrame[]) {
 
   for (const range of ranges) {
     if (range.start > current) {
-      missingRanges.push({ start: current, end: range.start - 0.00001 });
+      missingRanges.push({
+        start: current,
+        end: Utils.toFixedDigits(range.start - Utils.getFraction()),
+      });
     }
-    current = Math.max(range.end + 0.00001, current);
+    current = Math.max(
+      Utils.toFixedDigits(range.end + Utils.getFraction()),
+      current
+    );
   }
 
   if (current <= end) {
@@ -74,21 +61,18 @@ function findMissingRanges(start: number, end: number, ranges: KeyFrame[]) {
 }
 
 function reArrageFrames(frames: KeyFrame[], maxEnd: number) {
-  let rearranged = [
-    ...mergeRanges(frames).map((x) => ({
-      start: x.start,
-      end: x.end,
-      isNone: false,
-    })),
-  ];
-  rearranged = [
-    ...rearranged,
-    ...findMissingRanges(0, maxEnd, rearranged).map((x) => ({
-      start: x.start,
-      end: x.end,
-      isNone: true,
-    })),
-  ];
+  const merged: KeyFrame[] = mergeRanges(frames).map((x) => ({
+    ...x,
+    isNone: false,
+  }));
+
+  const missing: KeyFrame[] = findMissingRanges(0, maxEnd, merged).map((x) => ({
+    ...x,
+    isNone: true,
+  }));
+
+  const rearranged=[...merged,...missing]
+  
 
   return sortByStartTime(rearranged);
 }

@@ -3,6 +3,7 @@ import "./key-frames.component.scss";
 import { FC, memo } from "react";
 import { KeyFrame } from "../types";
 import FrameUtils from "../../shared/utilities/frame.utils";
+import Utils from "../../shared/utilities/utils";
 
 type KeyFramesProps = {
   max: number;
@@ -12,20 +13,14 @@ type KeyFramesProps = {
 };
 
 const KeyFrames: FC<KeyFramesProps> = ({ frames, max, current, map }) => {
-  console.log(
-    "ReArrangeFrames",
-    FrameUtils.ReArrangeFrames(
-      frames.map((x) => ({ ...x, end: x.end ?? current })),
-      max
-    ),
-    frames
+  const rearranged = FrameUtils.ReArrangeFrames(
+    frames.map((x) => ({ ...x, end: x.end ?? current })),
+    max
   );
+
   return (
     <ProgressBar className="mt-2">
-      {FrameUtils.ReArrangeFrames(
-        frames.map((x) => ({ ...x, end: x.end ?? current })),
-        max
-      ).map((f, index) => {
+      {rearranged.map((f, index) => {
         return CreateFrame(
           `${map}_${index}`,
           max,
@@ -57,7 +52,7 @@ function CreateFrame(
 }
 
 function GetProgress(start: number, end: number) {
-  return end - start;
+  return Utils.toFixedDigits(end - start);
 }
 
 function GetVariant(isNone: boolean) {

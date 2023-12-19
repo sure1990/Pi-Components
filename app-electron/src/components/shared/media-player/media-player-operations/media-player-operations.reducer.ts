@@ -1,3 +1,4 @@
+import Utils from "../../utilities/utils";
 import {
   MediaPlayerState,
   MediaPlayerAction,
@@ -18,7 +19,7 @@ const MediaPlayerOperationsReducer = (
       updatedState = {
         ...state,
         IsReady: true,
-        Duration: (duration ?? 0).toFixed(5),
+        Duration: Utils.toFixedDigits(duration ?? 0),
       };
       break;
     case MediaPlayerActionType.PLAY:
@@ -42,7 +43,7 @@ const MediaPlayerOperationsReducer = (
       break;
     case MediaPlayerActionType.UPDATE_TIME:
       const { time } = payload;
-      updatedState = { ...state, CurrentPosition: time.toFixed(5) };
+      updatedState = { ...state, CurrentPosition: Utils.toFixedDigits(time) };
       break;
     default:
       updatedState = { ...state };
