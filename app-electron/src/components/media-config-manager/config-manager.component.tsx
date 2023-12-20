@@ -4,10 +4,15 @@ import useKeyPressTracker from "../shared/key-press-tracker";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { KeyFrame } from "./types";
 import FrameUtils from "../shared/utilities/frame.utils";
+import { Button } from "react-bootstrap";
+import useConfigManager from "../shared/data-managers/config-manager.hook";
 
 const ConfigManager = () => {
   const { IsPlaying, CurrentTime, Duration } = useMediaStatus();
+
   const currentTimeRef = useRef(CurrentTime);
+
+  const { Save } = useConfigManager();
   useEffect(() => {
     currentTimeRef.current = CurrentTime;
   }, [CurrentTime]);
@@ -46,22 +51,29 @@ const ConfigManager = () => {
   }, [IsPlaying]);
 
   return (
-    <div className="row mt-3">
-      <div className="col-md">
-        {Object.keys(keys).map((k) => {
-          const frames = keys[k];
-          return (
-            <KeyFrames
-              key={k}
-              frames={frames}
-              map={k}
-              max={Duration}
-              current={CurrentTime}
-            />
-          );
-        })}
+    <>
+      <div className="row mt-3">
+        <div className="col-md">
+          {Object.keys(keys).map((k) => {
+            const frames = keys[k];
+            return (
+              <KeyFrames
+                key={k}
+                frames={frames}
+                map={k}
+                max={Duration}
+                current={CurrentTime}
+              />
+            );
+          })}
+        </div>
       </div>
-    </div>
+      <div className="fixed-bottom">
+        <Button variant="success" onClick={() => Save(keys)}>
+          Save
+        </Button>
+      </div>
+    </>
   );
 };
 

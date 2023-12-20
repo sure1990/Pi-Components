@@ -4,8 +4,11 @@ import MediaPlayer, { MediaStatusProvider } from "./shared/media-player";
 import "./App.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ConfigManager from "./media-config-manager";
+import { useEffect } from "react";
 
 function App() {
+
+
   return (
     <div className="m-2 p-2">
       <MediaStatusProvider>
