@@ -21,7 +21,7 @@ export class SQLiteDb {
     values: any[][]
   ): Promise<number> {
     const query = getQuery(tableName, columns, values);
-    console.log(query);
+
     const result = await new Promise<number>((resolve, reject) => {
       this._db.run(
         query,
@@ -30,7 +30,7 @@ export class SQLiteDb {
           if (err) {
             return reject(err);
           }
-          resolve(this.changes);
+          resolve(this.lastID);
         }
       );
     });
@@ -80,5 +80,17 @@ export class SQLiteDb {
     });
 
     return result;
+  }
+
+  public async Exec(query: string): Promise<void> {
+    const result = await new Promise((resolve, reject) => {
+      this._db.exec(query, function (err) {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(true);
+      });
+    });
   }
 }

@@ -9,7 +9,8 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts,.tsx ."
+    "lint": "eslint --ext .ts,.tsx .",
+    "rebuild": "electron-rebuild -f -w sqlite3"
   },
   "keywords": [],
   "author": {
@@ -32,6 +33,7 @@
     "@vercel/webpack-asset-relocator-loader": "^1.7.3",
     "css-loader": "^6.8.1",
     "electron": "27.1.2",
+    "electron-builder": "^24.9.1",
     "eslint": "^8.54.0",
     "eslint-plugin-import": "^2.29.0",
     "fork-ts-checker-webpack-plugin": "^7.3.0",
