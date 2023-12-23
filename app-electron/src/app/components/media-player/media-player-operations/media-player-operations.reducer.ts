@@ -1,10 +1,10 @@
-import Utils from "../../utilities/utils";
+import { NumericUtils } from '../../../shared/utilities';
 import {
   MediaPlayerState,
   MediaPlayerAction,
   MediaPlayerActionType,
   PlayerStateEnum,
-} from "./types";
+} from './types';
 
 const MediaPlayerOperationsReducer = (
   state: MediaPlayerState,
@@ -15,12 +15,14 @@ const MediaPlayerOperationsReducer = (
 
   switch (type) {
     case MediaPlayerActionType.INITIALIZATION_DONE:
-      const { duration } = payload;
-      updatedState = {
-        ...state,
-        IsReady: true,
-        Duration: Utils.toFixedDigits(duration ?? 0),
-      };
+      {
+        const { duration } = payload;
+        updatedState = {
+          ...state,
+          IsReady: true,
+          Duration: NumericUtils.toFixedDigits(duration ?? 0),
+        };
+      }
       break;
     case MediaPlayerActionType.PLAY:
       updatedState = { ...state, PlayerState: PlayerStateEnum.PLAYING };
@@ -42,8 +44,13 @@ const MediaPlayerOperationsReducer = (
       };
       break;
     case MediaPlayerActionType.UPDATE_TIME:
-      const { time } = payload;
-      updatedState = { ...state, CurrentPosition: Utils.toFixedDigits(time) };
+      {
+        const { time } = payload;
+        updatedState = {
+          ...state,
+          CurrentPosition: NumericUtils.toFixedDigits(time),
+        };
+      }
       break;
     default:
       updatedState = { ...state };

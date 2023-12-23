@@ -1,4 +1,4 @@
-const Utils = {
+const NumericUtils = {
   toFixedDigits(time: number): number {
     return +time.toFixed(5);
   },
@@ -7,4 +7,4 @@ const Utils = {
   },
 };
 
-export default Utils;
+export default NumericUtils;

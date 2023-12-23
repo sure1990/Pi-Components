@@ -1,5 +1,5 @@
-import { KeyFrame } from "../../media-config-manager/types";
-import Utils from "./utils";
+import { KeyFrame } from '../types';
+import { NumericUtils } from '.';
 
 function startFrame(start: number, frames: KeyFrame[]) {
   return [...frames, { start, isNone: false }];
@@ -44,11 +44,13 @@ function findMissingRanges(start: number, end: number, ranges: KeyFrame[]) {
     if (range.start > current) {
       missingRanges.push({
         start: current,
-        end: Utils.toFixedDigits(range.start - Utils.getFraction()),
+        end: NumericUtils.toFixedDigits(
+          range.start - NumericUtils.getFraction()
+        ),
       });
     }
     current = Math.max(
-      Utils.toFixedDigits(range.end + Utils.getFraction()),
+      NumericUtils.toFixedDigits(range.end + NumericUtils.getFraction()),
       current
     );
   }
@@ -71,8 +73,7 @@ function reArrageFrames(frames: KeyFrame[], maxEnd: number) {
     isNone: true,
   }));
 
-  const rearranged=[...merged,...missing]
-  
+  const rearranged = [...merged, ...missing];
 
   return sortByStartTime(rearranged);
 }

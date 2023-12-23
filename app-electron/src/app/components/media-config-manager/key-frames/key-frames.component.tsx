@@ -1,9 +1,8 @@
-import ProgressBar from "react-bootstrap/ProgressBar";
-import "./key-frames.component.scss";
-import { FC, memo } from "react";
-import { KeyFrame } from "../types";
-import FrameUtils from "../../shared/utilities/frame.utils";
-import Utils from "../../shared/utilities/utils";
+import ProgressBar from 'react-bootstrap/ProgressBar';
+import './key-frames.component.scss';
+import { FC, memo } from 'react';
+import { KeyFrame } from '../../../shared/types';
+import { FrameUtils, NumericUtils } from '../../../shared/utilities';
 
 type KeyFramesProps = {
   max: number;
@@ -37,7 +36,7 @@ function CreateFrame(
   key: string,
   max: number,
   progress: number,
-  variant: string = "success",
+  variant: string,
   className?: string
 ) {
   return (
@@ -52,15 +51,15 @@ function CreateFrame(
 }
 
 function GetProgress(start: number, end: number) {
-  return Utils.toFixedDigits(end - start);
+  return NumericUtils.toFixedDigits(end - start);
 }
 
 function GetVariant(isNone: boolean) {
-  return !isNone ? "success" : undefined;
+  return !isNone ? 'success' : undefined;
 }
 
 function GetClassName(isNone: boolean) {
-  return isNone ? "bg-none" : undefined;
+  return isNone ? 'bg-none' : undefined;
 }
 
 export default memo(KeyFrames, (prev, next) => {

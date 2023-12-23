@@ -1,11 +1,10 @@
-import KeyFrames from "./key-frames/key-frames.component";
-import { useMediaStatus } from "../shared/media-player";
-import useKeyPressTracker from "../shared/key-press-tracker";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { KeyFrame } from "./types";
-import FrameUtils from "../shared/utilities/frame.utils";
-import { Button } from "react-bootstrap";
-import useConfigManager from "../shared/data-managers/config-manager.hook";
+import KeyFrames from './key-frames/key-frames.component';
+import { useMediaStatus } from '../media-player';
+import { useKeyPressTracker, useConfigManager } from '../../shared/hooks';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { KeyFrame } from '../../shared/types';
+import { FrameUtils } from '../../shared/utilities';
+import { Button } from 'react-bootstrap';
 
 const ConfigManager = () => {
   const { IsPlaying, CurrentTime, Duration } = useMediaStatus();
