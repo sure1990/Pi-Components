@@ -1,14 +1,15 @@
-import { ipcMain } from "electron";
-import api from "./api";
-import { DbUtils } from "./utilities";
+import { ipcMain } from 'electron';
+import api from './api';
+import { DbUtils, FileUtils } from './utilities';
 
 export default () => {
   initialize();
-  ipcMain.handle("api", (_, ...args) => {
+  ipcMain.handle('api', (_, ...args) => {
     return api(args[0], args[1]);
   });
 };
 
 function initialize() {
+  FileUtils.CreateAppDir();
   DbUtils.InitializeDb();
 }

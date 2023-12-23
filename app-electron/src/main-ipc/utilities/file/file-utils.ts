@@ -1,9 +1,9 @@
-import { app } from "electron";
-import path from "path";
-import fs from "fs";
+import { app } from 'electron';
+import path from 'path';
+import fs from 'fs';
 
 function GetAppPath() {
-  return path.join(app.getPath("appData"), "vrtdesigns");
+  return path.join(app.getPath('appData'), 'mf-client');
 }
 
 function CreateAppDir() {
