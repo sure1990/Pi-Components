@@ -1,5 +1,11 @@
 const SelectKeyTriggers = (): any[] => {
-  return [];
+  let response: any[] = [];
+  try {
+    //Some Code
+  } catch (error) {
+    console.error(error);
+  }
+  return response;
 };
 
 export default SelectKeyTriggers;
