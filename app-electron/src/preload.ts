@@ -3,7 +3,11 @@
 
 declare global {
   interface Window {
-    InvokeApi: (method: string, body: any) => Promise<any>;
+    InvokeApi: <TResponse = any>(
+      method: APIMethods,
+      body?: APIRequestBody
+    ) => Promise<TResponse>;
   }
 }
-import "./renderer-ipc";
+import { APIRequestBody, APIMethods } from './shared/types';
+import './renderer-ipc';

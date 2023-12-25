@@ -1,6 +1,6 @@
-import { FC, memo } from "react";
+import { FC, memo } from 'react';
 
-import { DateTimeUtils } from "../../../../utilities";
+import { DateTimeUtils } from '../../../../shared/utilities';
 type ProgressProps = { total: number; current: number };
 
 const Progress: FC<ProgressProps> = ({ total, current }) => {

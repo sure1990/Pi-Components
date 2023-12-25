@@ -1,5 +1,5 @@
 import { DbUtils, SQLiteDb } from '../../utilities';
-import { InsertTracksRequest, TrackFrame } from './types';
+import { InsertTracksRequest, TrackFrame } from '../../../shared/types';
 
 const InsertTracks = async (tracks: InsertTracksRequest) => {
   const db = new SQLiteDb(DbUtils.GetDbPath());

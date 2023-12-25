@@ -1,5 +1,5 @@
-import { Database } from "sqlite3";
-import { getQuery } from "./insert";
+import { Database } from 'sqlite3';
+import { getQuery } from './insert';
 
 export class SQLiteDb {
   private readonly _db: Database;
@@ -11,6 +11,7 @@ export class SQLiteDb {
     try {
       if (this._db) this._db.close();
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
