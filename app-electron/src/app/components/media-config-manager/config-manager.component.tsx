@@ -4,6 +4,7 @@ import { useKeyPressTracker, useConfigManager } from '../../shared/hooks';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { KeyFrame } from '../../shared/types';
 import { FrameUtils } from '../../shared/utilities';
+import { DataProvider } from './data-provider';
 import { Button } from 'react-bootstrap';
 
 const ConfigManager = () => {
@@ -11,7 +12,7 @@ const ConfigManager = () => {
 
   const currentTimeRef = useRef(CurrentTime);
 
-  const { Save } = useConfigManager();
+  const { Save, KeyMapping } = useConfigManager();
   useEffect(() => {
     currentTimeRef.current = CurrentTime;
   }, [CurrentTime]);
@@ -20,8 +21,17 @@ const ConfigManager = () => {
     [key: string]: KeyFrame[];
   }>({});
 
+  useEffect(() => {
+    let initialKeys: { [key: string]: KeyFrame[] } = {};
+    Object.keys(KeyMapping).forEach((k) => {
+      initialKeys = { ...initialKeys, [k]: [] };
+    });
+    setKeys(initialKeys);
+  }, [KeyMapping]);
+
   const onKeyDown = useCallback((key: string) => {
     setKeys((prev) => {
+      if (!prev[key]) return prev;
       const updated = { ...prev };
       updated[key] = FrameUtils.StartFrame(
         currentTimeRef.current,
@@ -33,6 +43,7 @@ const ConfigManager = () => {
 
   const onKeyUp = useCallback((key: string) => {
     setKeys((prev) => {
+      if (!prev[key]) return prev;
       const current = currentTimeRef.current;
       const updated = { ...prev };
       if (updated[key]) {
@@ -50,21 +61,23 @@ const ConfigManager = () => {
   }, [IsPlaying]);
 
   return (
-    <>
+    <DataProvider keyMapping={KeyMapping}>
       <div className="row mt-3">
         <div className="col-md">
-          {Object.keys(keys).map((k) => {
-            const frames = keys[k];
-            return (
-              <KeyFrames
-                key={k}
-                frames={frames}
-                map={k}
-                max={Duration}
-                current={CurrentTime}
-              />
-            );
-          })}
+          {Object.keys(keys)
+            .filter((k) => keys[k].length > 0)
+            .map((k) => {
+              const frames = keys[k];
+              return (
+                <KeyFrames
+                  key={k}
+                  frames={frames}
+                  map={k}
+                  max={Duration}
+                  current={CurrentTime}
+                />
+              );
+            })}
         </div>
       </div>
       <div className="fixed-bottom">
@@ -72,7 +85,7 @@ const ConfigManager = () => {
           Save
         </Button>
       </div>
-    </>
+    </DataProvider>
   );
 };
 

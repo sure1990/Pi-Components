@@ -1,9 +1,19 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { KeyFrame } from '../../types';
+import { KeyTrigger } from '../../../../shared/types';
 
 const useConfigManager = () => {
+  const [keys, setKeys] = useState<{ [key: string]: Omit<KeyTrigger, 'Key'> }>(
+    {}
+  );
   useEffect(() => {
-    window.InvokeApi('KeyMap:Select');
+    window.InvokeApi<KeyTrigger[]>('KeyMap:Select').then((x) => {
+      setKeys(
+        x.reduce((prev, curr) => {
+          return { ...prev, [curr.Key]: { ...curr } };
+        }, keys)
+      );
+    });
   }, []);
 
   const saveFrames = useCallback(
@@ -15,7 +25,7 @@ const useConfigManager = () => {
     []
   );
 
-  return { Save: saveFrames };
+  return { Save: saveFrames, KeyMapping: keys };
 };
 
 export default useConfigManager;
