@@ -4,13 +4,9 @@ import { InsertTracksRequest, TrackFrame } from '../../../shared/types';
 const InsertTracks = async (tracks: InsertTracksRequest) => {
   const db = new SQLiteDb(DbUtils.GetDbPath());
   try {
-    const tracksPromise: Promise<void>[] = [];
     for (const track of tracks.Tracks) {
-      tracksPromise.push(
-        InsertTrack(db, tracks.MusicId, track.TriggerId, track.Frames)
-      );
+      await InsertTrack(db, tracks.MusicId, track.TriggerId, track.Frames);
     }
-    await Promise.all(tracksPromise);
   } catch (error) {
     console.error(error);
   } finally {

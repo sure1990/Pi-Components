@@ -10,6 +10,7 @@ const SelectKeyTriggers = async (): Promise<KeyTrigger[]> => {
     KM.key Key
     ,KM.name KeyName
     ,TM.pin_no PinNo
+    ,TM.id TriggerId
     
 FROM
     cfg_Trigger_To_Key_Map TKM
