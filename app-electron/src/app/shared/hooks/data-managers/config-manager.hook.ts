@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { KeyFrame } from '../../types';
 import { KeyTrigger, InsertTracksRequest } from '../../../../shared/types';
+import { FrameUtils } from '../../utilities';
 
 const useConfigManager = () => {
   const [keys, setKeys] = useState<{ [key: string]: Omit<KeyTrigger, 'Key'> }>(
@@ -25,7 +26,10 @@ const useConfigManager = () => {
           .map((k) => {
             return {
               TriggerId: keys[k].TriggerId,
-              Frames: frames[k].map((x) => ({ Start: x.start, End: x.end })),
+              Frames: FrameUtils.MergeFrames(frames[k]).map((x) => ({
+                Start: x.start,
+                End: x.end,
+              })),
             };
           }),
       };

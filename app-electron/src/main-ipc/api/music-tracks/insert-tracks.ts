@@ -4,6 +4,9 @@ import { InsertTracksRequest, TrackFrame } from '../../../shared/types';
 const InsertTracks = async (tracks: InsertTracksRequest) => {
   const db = new SQLiteDb(DbUtils.GetDbPath());
   try {
+    await db.Delete('DELETE FROM cfg_Music_Tracks_Master WHERE music_id=?', [
+      tracks.MusicId,
+    ]);
     for (const track of tracks.Tracks) {
       await InsertTrack(db, tracks.MusicId, track.TriggerId, track.Frames);
     }

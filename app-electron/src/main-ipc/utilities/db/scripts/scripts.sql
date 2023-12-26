@@ -32,6 +32,5 @@ CREATE TABLE IF NOT EXISTS "cfg_Track_Frames_Map" (
 	"track_id" INTEGER NOT NULL,
 	"start" NUMERIC NOT NULL,
 	"end" NUMERIC NOT NULL,
-	FOREIGN KEY("track_id") REFERENCES cfg_Music_Tracks_Master(id),
-	PRIMARY KEY("track_id")
+	FOREIGN KEY("track_id") REFERENCES cfg_Music_Tracks_Master(id) ON DELETE CASCADE
 );

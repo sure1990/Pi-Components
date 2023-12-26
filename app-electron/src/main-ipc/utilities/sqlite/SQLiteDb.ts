@@ -3,8 +3,9 @@ import { getQuery } from './insert';
 
 export class SQLiteDb {
   private readonly _db: Database;
-  constructor(private readonly _dbPath: string) {
+  constructor(_dbPath: string) {
     this._db = new Database(_dbPath);
+    this._db.get('PRAGMA foreign_keys = ON');
   }
 
   public Close() {

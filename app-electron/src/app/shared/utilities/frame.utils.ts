@@ -86,6 +86,7 @@ const FrameUtils = {
   StartFrame: startFrame,
   EndFrame: endFrame,
   ReArrangeFrames: reArrageFrames,
+  MergeFrames: mergeRanges,
   Sort: sortByStartTime,
 };
 
