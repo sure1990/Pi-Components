@@ -7,6 +7,7 @@ const REGISTRY: {
 } = {
   'Tracks:Insert': MusicTracks.InsertTracks,
   'KeyMap:Select': SelectKeyTriggers,
+  'Tracks:Fetch': MusicTracks.FetchTracks,
 };
 
 export default async (

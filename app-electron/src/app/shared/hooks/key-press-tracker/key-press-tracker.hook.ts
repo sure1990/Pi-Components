@@ -1,13 +1,18 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState } from 'react';
 
 type KeyTrackEvent = (key: string) => void;
 
-const useKeyPressTracker = (
-  onKeyDown?: KeyTrackEvent,
-  onKeyUp?: KeyTrackEvent
-) => {
+const useKeyPressTracker = () => {
   const [, setPressed] = useState<string[]>([]);
   const pressedRef = useRef<string[]>([]);
+  const keyEventsCbRef = useRef<[KeyTrackEvent, KeyTrackEvent] | null>(null);
+
+  const init = useCallback(
+    (onKeyDown: KeyTrackEvent, onKeyUp: KeyTrackEvent) => {
+      keyEventsCbRef.current = [onKeyDown, onKeyUp];
+    },
+    []
+  );
 
   const handleKeyDown = useCallback((ev: KeyboardEvent) => {
     ev.stopPropagation();
@@ -19,8 +24,8 @@ const useKeyPressTracker = (
       return updated;
     });
 
-    if (onKeyDown) {
-      onKeyDown(ev.key);
+    if (keyEventsCbRef.current) {
+      keyEventsCbRef.current[0](ev.key);
     }
   }, []);
 
@@ -32,25 +37,26 @@ const useKeyPressTracker = (
       pressedRef.current = updated;
       return updated;
     });
-    if (onKeyUp) {
-      onKeyUp(ev.key);
+
+    if (keyEventsCbRef.current) {
+      keyEventsCbRef.current[1](ev.key);
     }
   }, []);
 
   const attachEvents = useCallback(() => {
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keyup", handleKeyUp);
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
   }, [handleKeyDown, handleKeyUp]);
 
   const removeEvents = useCallback(() => {
-    window.removeEventListener("keydown", handleKeyDown);
-    window.removeEventListener("keyup", handleKeyUp);
+    window.removeEventListener('keydown', handleKeyDown);
+    window.removeEventListener('keyup', handleKeyUp);
 
     setPressed([]);
     pressedRef.current = [];
   }, [handleKeyDown, handleKeyUp]);
 
-  return { Attach: attachEvents, Remove: removeEvents };
+  return { Attach: attachEvents, Remove: removeEvents, Init: init };
 };
 
 export default useKeyPressTracker;

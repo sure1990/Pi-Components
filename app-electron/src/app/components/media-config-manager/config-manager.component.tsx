@@ -18,42 +18,65 @@ const ConfigManager = () => {
   }, [CurrentTime]);
 
   const [keys, setKeys] = useState<{
-    [key: string]: KeyFrame[];
+    [pin: number]: KeyFrame[];
   }>({});
 
   useEffect(() => {
-    let initialKeys: { [key: string]: KeyFrame[] } = {};
+    let initialKeys: { [key: number]: KeyFrame[] } = {};
     Object.keys(KeyMapping).forEach((k) => {
-      initialKeys = { ...initialKeys, [k]: [] };
+      initialKeys = { ...initialKeys, [+k]: [] };
     });
     setKeys(initialKeys);
   }, [KeyMapping]);
 
-  const onKeyDown = useCallback((key: string) => {
-    setKeys((prev) => {
-      if (!prev[key]) return prev;
-      const updated = { ...prev };
-      updated[key] = FrameUtils.StartFrame(
-        currentTimeRef.current,
-        updated[key] ?? []
-      );
-      return updated;
-    });
-  }, []);
+  const onKeyDown = useCallback(
+    (key: string) => {
+      const triggers = Object.keys(KeyMapping)
+        .map((t) => +t)
+        .filter((t) => KeyMapping[t].some((x) => x.Key === key));
 
-  const onKeyUp = useCallback((key: string) => {
-    setKeys((prev) => {
-      if (!prev[key]) return prev;
-      const current = currentTimeRef.current;
-      const updated = { ...prev };
-      if (updated[key]) {
-        updated[key] = FrameUtils.EndFrame(current, updated[key]);
-      }
-      return updated;
-    });
-  }, []);
+      if (triggers.length === 0) return;
 
-  const { Attach, Remove } = useKeyPressTracker(onKeyDown, onKeyUp);
+      setKeys((prev) => {
+        const updated = { ...prev };
+        for (const trigger of triggers) {
+          updated[trigger] = FrameUtils.StartFrame(
+            currentTimeRef.current,
+            updated[trigger] ?? []
+          );
+        }
+        return updated;
+      });
+    },
+    [KeyMapping]
+  );
+
+  const onKeyUp = useCallback(
+    (key: string) => {
+      const triggers = Object.keys(KeyMapping)
+        .filter((t) => KeyMapping[+t].some((x) => x.Key === key))
+        .map((t) => +t);
+      if (triggers.length === 0) return;
+      setKeys((prev) => {
+        // if (!prev[key]) return prev;
+        const current = currentTimeRef.current;
+        const updated = { ...prev };
+        for (const trigger of triggers) {
+          if (updated[trigger]) {
+            updated[trigger] = FrameUtils.EndFrame(current, updated[trigger]);
+          }
+        }
+        return updated;
+      });
+    },
+    [KeyMapping]
+  );
+
+  const { Attach, Remove, Init } = useKeyPressTracker();
+
+  useEffect(() => {
+    Init(onKeyDown, onKeyUp);
+  }, [onKeyDown, onKeyUp]);
 
   useEffect(() => {
     const c = IsPlaying ? Attach : Remove;
@@ -65,14 +88,14 @@ const ConfigManager = () => {
       <div className="row mt-3">
         <div className="col-md">
           {Object.keys(keys)
-            .filter((k) => keys[k].length > 0)
+            .filter((k) => keys[+k].length > 0)
             .map((k) => {
-              const frames = keys[k];
+              const frames = keys[+k];
               return (
                 <KeyFrames
                   key={k}
                   frames={frames}
-                  map={k}
+                  map={+k}
                   max={Duration}
                   current={CurrentTime}
                 />

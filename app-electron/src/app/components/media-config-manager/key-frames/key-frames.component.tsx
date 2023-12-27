@@ -10,12 +10,12 @@ type KeyFramesProps = {
   max: number;
   frames: KeyFrame[];
   current: number;
-  map: string;
+  map: number;
 };
 
 const KeyFrames: FC<KeyFramesProps> = ({ frames, max, current, map }) => {
   const { KeyMapping } = useConfigManagerDataProvider();
-  const { KeyName, PinNo } = KeyMapping[map];
+  // const { KeyName, PinNo } = KeyMapping[map];
 
   const rearranged = FrameUtils.ReArrangeFrames(
     frames.map((x) => ({ ...x, end: x.end ?? current })),
@@ -26,12 +26,17 @@ const KeyFrames: FC<KeyFramesProps> = ({ frames, max, current, map }) => {
     <>
       <div className="mt-3">
         <Badge variant="primary" className="mr-1">
-          {KeyName}
-        </Badge>
-        <Badge variant="secondary" className="mr-1">
           {map}
         </Badge>
-        <Badge variant="info">{PinNo}</Badge>
+        {KeyMapping[map].map((x) => (
+          <Badge
+            variant="secondary"
+            className="mr-1"
+            key={`badge_${map}_${x.Key}`}
+          >
+            {`${x.Key}-${x.KeyName}`}
+          </Badge>
+        ))}
       </div>
       <ProgressBar className="mt-2 progress-height">
         {rearranged.map((f, index) => {
