@@ -9,3 +9,10 @@ export type MusicTrack = {
 };
 
 export type TrackFrame = { Start: number; End: number };
+
+export type SavedTracks = {
+  TriggerId: number;
+  PinNo: number;
+  Start: number;
+  End: number;
+};

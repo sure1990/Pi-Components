@@ -3,4 +3,5 @@ export type KeyTrigger = {
   KeyName: string;
   PinNo: number;
   TriggerId: number;
+  TriggerName: string;
 };

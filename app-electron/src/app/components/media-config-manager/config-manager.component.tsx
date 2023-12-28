@@ -12,7 +12,7 @@ const ConfigManager = () => {
 
   const currentTimeRef = useRef(CurrentTime);
 
-  const { Save, KeyMapping } = useConfigManager();
+  const { Save, KeyMapping, SavedTracks } = useConfigManager();
   useEffect(() => {
     currentTimeRef.current = CurrentTime;
   }, [CurrentTime]);
@@ -22,12 +22,8 @@ const ConfigManager = () => {
   }>({});
 
   useEffect(() => {
-    let initialKeys: { [key: number]: KeyFrame[] } = {};
-    Object.keys(KeyMapping).forEach((k) => {
-      initialKeys = { ...initialKeys, [+k]: [] };
-    });
-    setKeys(initialKeys);
-  }, [KeyMapping]);
+    setKeys(SavedTracks);
+  }, [SavedTracks]);
 
   const onKeyDown = useCallback(
     (key: string) => {
@@ -91,6 +87,7 @@ const ConfigManager = () => {
             .filter((k) => keys[+k].length > 0)
             .map((k) => {
               const frames = keys[+k];
+              console.log(frames);
               return (
                 <KeyFrames
                   key={k}

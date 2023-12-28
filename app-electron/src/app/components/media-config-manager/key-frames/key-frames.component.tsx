@@ -15,18 +15,23 @@ type KeyFramesProps = {
 
 const KeyFrames: FC<KeyFramesProps> = ({ frames, max, current, map }) => {
   const { KeyMapping } = useConfigManagerDataProvider();
-  // const { KeyName, PinNo } = KeyMapping[map];
+  const [{ TriggerName }] = KeyMapping[map];
 
   const rearranged = FrameUtils.ReArrangeFrames(
     frames.map((x) => ({ ...x, end: x.end ?? current })),
     max
   );
 
+  console.log('rearranged', rearranged);
+
   return (
     <>
       <div className="mt-3">
         <Badge variant="primary" className="mr-1">
           {map}
+        </Badge>
+        <Badge variant="primary" className="mr-1">
+          {TriggerName}
         </Badge>
         {KeyMapping[map].map((x) => (
           <Badge

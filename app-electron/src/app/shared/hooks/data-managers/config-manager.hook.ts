@@ -1,11 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
 import { KeyFrame } from '../../types';
-import { KeyTrigger, InsertTracksRequest } from '../../../../shared/types';
+import {
+  KeyTrigger,
+  InsertTracksRequest,
+  SavedTracks,
+} from '../../../../shared/types';
 import { FrameUtils } from '../../utilities';
 import { KeyTriggerMap } from '../../../components/media-config-manager/data-provider/types';
 
 const useConfigManager = () => {
   const [keys, setKeys] = useState<KeyTriggerMap>({});
+  const [tracks, setTracks] = useState<{ [pinNo: number]: KeyFrame[] }>({});
   useEffect(() => {
     window.InvokeApi<KeyTrigger[]>('KeyMap:Select').then((x) => {
       setKeys(
@@ -24,6 +29,31 @@ const useConfigManager = () => {
     });
   }, []);
 
+  const applySavedTracks = useCallback(async () => {
+    const savedTracks = await window.InvokeApi<SavedTracks[]>(
+      'Tracks:Fetch',
+      1
+    );
+
+    let initialKeys: { [key: number]: KeyFrame[] } = {};
+    Object.keys(keys)
+      .map((x) => +x)
+      .forEach((k) => {
+        initialKeys = {
+          ...initialKeys,
+          [k]: savedTracks
+            .filter((x) => x.PinNo === k)
+            .map((p) => ({ start: p.Start, end: p.End, isNone: false })),
+        };
+      });
+
+    setTracks(initialKeys);
+  }, [keys]);
+
+  useEffect(() => {
+    applySavedTracks();
+  }, [applySavedTracks]);
+
   const saveFrames = useCallback(
     async (frames: { [key: number]: KeyFrame[] }) => {
       const requestBody: InsertTracksRequest = {
@@ -40,15 +70,14 @@ const useConfigManager = () => {
             };
           }),
       };
-      console.log('requestBody', requestBody);
-      const result = await window.InvokeApi('Tracks:Insert', requestBody);
 
-      console.log('saveFrames', result);
+      await window.InvokeApi('Tracks:Insert', requestBody);
+      applySavedTracks();
     },
     [keys]
   );
 
-  return { Save: saveFrames, KeyMapping: keys };
+  return { Save: saveFrames, KeyMapping: keys, SavedTracks: tracks };
 };
 
 export default useConfigManager;

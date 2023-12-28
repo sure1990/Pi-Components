@@ -3,14 +3,14 @@ import { KeyTrigger } from '../../../shared/types';
 
 const SelectKeyTriggers = async (): Promise<KeyTrigger[]> => {
   let response: KeyTrigger[] = [];
+  const db = new SQLiteDb(DbUtils.GetDbPath());
   try {
-    //Some Code
-    const db = new SQLiteDb(DbUtils.GetDbPath());
     response = await db.SelectAll<KeyTrigger>(`SELECT
     KM.key Key
     ,KM.name KeyName
     ,TM.pin_no PinNo
     ,TM.id TriggerId
+    ,TM.name TriggerName
     
 FROM
     cfg_Trigger_To_Key_Map TKM
@@ -20,6 +20,8 @@ FROM
         ON TKM.trigger_id=TM.id`);
   } catch (error) {
     console.error(error);
+  } finally {
+    db.Close();
   }
   return response;
 };
