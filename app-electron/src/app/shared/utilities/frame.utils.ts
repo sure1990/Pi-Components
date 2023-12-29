@@ -82,12 +82,35 @@ function sortByStartTime(frames: KeyFrame[]) {
   return frames.sort((a, b) => a.start - b.start);
 }
 
+function findRangeBinarySearch(
+  number: number,
+  ranges: KeyFrame[]
+): number | null {
+  let left = 0;
+  let right = ranges.length - 1;
+
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    const currentRange = ranges[mid];
+
+    if (number >= currentRange.start && number <= currentRange.end) {
+      return mid;
+    } else if (number < currentRange.start) {
+      right = mid - 1;
+    } else {
+      left = mid + 1;
+    }
+  }
+
+  return null; // If number doesn't fall into any range
+}
+
 const FrameUtils = {
   StartFrame: startFrame,
   EndFrame: endFrame,
   ReArrangeFrames: reArrageFrames,
-  MergeFrames: mergeRanges,
   Sort: sortByStartTime,
+  GetCurrentFrame: findRangeBinarySearch,
 };
 
 export default FrameUtils;

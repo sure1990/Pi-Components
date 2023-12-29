@@ -42,6 +42,7 @@ function InitializeDb() {
 		"track_id" INTEGER NOT NULL,
 		"start" NUMERIC NOT NULL,
 		"end" NUMERIC NOT NULL,
+		"state" INTEGER NOT NULL,
 		FOREIGN KEY("track_id") REFERENCES cfg_Music_Tracks_Master(id) ON DELETE CASCADE
 	);`);
 

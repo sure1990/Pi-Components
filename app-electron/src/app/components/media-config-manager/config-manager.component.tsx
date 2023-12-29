@@ -87,7 +87,6 @@ const ConfigManager = () => {
             .filter((k) => keys[+k].length > 0)
             .map((k) => {
               const frames = keys[+k];
-              console.log(frames);
               return (
                 <KeyFrames
                   key={k}

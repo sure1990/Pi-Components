@@ -32,8 +32,8 @@ async function InsertTrack(
   if (trackId > 0) {
     await db.Insert(
       'cfg_Track_Frames_Map',
-      ['track_id', 'start', 'end'],
-      frames.map((x) => [trackId, x.Start, x.End])
+      ['track_id', 'start', 'end', 'state'],
+      frames.map((x) => [trackId, x.Start, x.End, x.State])
     );
   }
 }

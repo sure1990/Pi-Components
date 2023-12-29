@@ -7,10 +7,12 @@ import {
 } from '../../../../shared/types';
 import { FrameUtils } from '../../utilities';
 import { KeyTriggerMap } from '../../../components/media-config-manager/data-provider/types';
+import { useMediaStatus } from '../../../components/media-player';
 
 const useConfigManager = () => {
   const [keys, setKeys] = useState<KeyTriggerMap>({});
   const [tracks, setTracks] = useState<{ [pinNo: number]: KeyFrame[] }>({});
+  const { Duration } = useMediaStatus();
   useEffect(() => {
     window.InvokeApi<KeyTrigger[]>('KeyMap:Select').then((x) => {
       setKeys(
@@ -42,8 +44,12 @@ const useConfigManager = () => {
         initialKeys = {
           ...initialKeys,
           [k]: savedTracks
-            .filter((x) => x.PinNo === k)
-            .map((p) => ({ start: p.Start, end: p.End, isNone: false })),
+            .filter((x) => x.PinNo === k && x.Start === 1)
+            .map((p) => ({
+              start: p.Start,
+              end: p.End,
+              isNone: false,
+            })),
         };
       });
 
@@ -63,10 +69,9 @@ const useConfigManager = () => {
           .map((k) => {
             return {
               TriggerId: keys[+k][0].TriggerId,
-              Frames: FrameUtils.MergeFrames(frames[+k]).map((x) => ({
-                Start: x.start,
-                End: x.end,
-              })),
+              Frames: FrameUtils.ReArrangeFrames(frames[+k], Duration).map(
+                (x) => ({ Start: x.start, End: x.end, State: !x.isNone })
+              ),
             };
           }),
       };

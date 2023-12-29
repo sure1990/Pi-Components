@@ -8,11 +8,12 @@ export type MusicTrack = {
   Frames: TrackFrame[];
 };
 
-export type TrackFrame = { Start: number; End: number };
+export type TrackFrame = { Start: number; End: number; State: boolean };
 
 export type SavedTracks = {
   TriggerId: number;
   PinNo: number;
   Start: number;
   End: number;
+  State: number;
 };

@@ -1,10 +1,10 @@
-import ProgressBar from 'react-bootstrap/ProgressBar';
 import './key-frames.component.scss';
 import { FC, memo } from 'react';
 import { KeyFrame } from '../../../shared/types';
 import { FrameUtils, NumericUtils } from '../../../shared/utilities';
 import { useConfigManagerDataProvider } from '../data-provider';
 import { Badge } from 'react-bootstrap';
+import FrameProgress from './frame-progress.component';
 
 type KeyFramesProps = {
   max: number;
@@ -21,8 +21,6 @@ const KeyFrames: FC<KeyFramesProps> = ({ frames, max, current, map }) => {
     frames.map((x) => ({ ...x, end: x.end ?? current })),
     max
   );
-
-  console.log('rearranged', rearranged);
 
   return (
     <>
@@ -43,53 +41,32 @@ const KeyFrames: FC<KeyFramesProps> = ({ frames, max, current, map }) => {
           </Badge>
         ))}
       </div>
-      <ProgressBar className="mt-2 progress-height">
-        {rearranged.map((f, index) => {
-          return CreateFrame(
-            `${map}_${index}`,
-            max,
-            GetProgress(f.start, f.end ?? current),
-            GetVariant(f.isNone),
-            GetClassName(f.isNone)
-          );
-        })}
-      </ProgressBar>
+      <div className="progress mt-2 progress-height">
+        {rearranged.map((f, index) => (
+          <FrameProgress
+            key={`${map}_${index}`}
+            className={GetClassName(f.isNone)}
+            width={GetProgress(f.start, f.end ?? current, max)}
+          />
+        ))}
+      </div>
     </>
   );
 };
 
-function CreateFrame(
-  key: string,
-  max: number,
-  progress: number,
-  variant: string,
-  className?: string
-) {
-  return (
-    <ProgressBar
-      variant={className ? undefined : variant}
-      key={key}
-      now={progress}
-      className={className}
-      max={max}
-    />
-  );
-}
-
-function GetProgress(start: number, end: number) {
-  return NumericUtils.toFixedDigits(end - start);
-}
-
-function GetVariant(isNone: boolean) {
-  return !isNone ? 'success' : undefined;
+function GetProgress(start: number, end: number, max: number) {
+  return NumericUtils.toFixedDigits(((end - start) / max) * 100);
 }
 
 function GetClassName(isNone: boolean) {
-  return isNone ? 'bg-none' : undefined;
+  return isNone ? 'bg-danger' : 'bg-success';
 }
 
 export default memo(KeyFrames, (prev, next) => {
   return (
-    prev.frames === next.frames && !next.frames.some((x) => x.end === undefined)
+    prev.frames === next.frames &&
+    prev.max === next.max &&
+    !next.frames.some((x) => x.end === undefined) &&
+    prev.current === next.current
   );
 });
