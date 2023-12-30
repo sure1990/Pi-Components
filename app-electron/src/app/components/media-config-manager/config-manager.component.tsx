@@ -23,23 +23,25 @@ const ConfigManager = () => {
   return (
     <DataProvider keyMapping={keyMapping}>
       <div className="row mt-3">
-        <div className="col-md">
-          {Object.keys(tracks)
-            .map((x) => +x)
-            .filter((k) => tracks[k].length > 0)
-            .map((k) => {
-              const frames = tracks[k];
-              return (
-                <KeyFrames
-                  key={k}
-                  frames={frames}
-                  map={k}
-                  max={Duration}
-                  current={CurrentTime}
-                />
-              );
-            })}
-        </div>
+        {Duration > 0 && (
+          <div className="col-md">
+            {Object.keys(tracks)
+              .map((x) => +x)
+              .filter((k) => tracks[k].length > 0)
+              .map((k) => {
+                const frames = tracks[k];
+                return (
+                  <KeyFrames
+                    key={k}
+                    frames={frames}
+                    map={k}
+                    max={Duration}
+                    current={CurrentTime}
+                  />
+                );
+              })}
+          </div>
+        )}
       </div>
       <div className="fixed-bottom">
         <Button variant="success" onClick={saveTracks}>

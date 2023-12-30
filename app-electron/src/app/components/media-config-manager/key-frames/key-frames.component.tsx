@@ -66,7 +66,6 @@ export default memo(KeyFrames, (prev, next) => {
   return (
     prev.frames === next.frames &&
     prev.max === next.max &&
-    !next.frames.some((x) => x.end === undefined) &&
-    prev.current === next.current
+    !next.frames.some((x) => x.end === undefined)
   );
 });

@@ -1,4 +1,5 @@
 import { SavedTracks } from '../../../../shared/types';
+import { InterfacingService } from '../../services';
 import { FrameUtils } from '../../utilities';
 import { TrackSyncActionsEnum } from './types';
 
@@ -43,8 +44,10 @@ async function syncPerPin(pinNo: number, time: number) {
   if (frameToSyncIndex >= 0 && !syncedTracks.includes(frameToSyncIndex)) {
     syncedTracks.push(frameToSyncIndex);
     const frameToSync = tracks[frameToSyncIndex];
-    if (frameToSync)
-      console.log('frameToSync', `${frameToSync.PinNo}=>${frameToSync.State}`);
+    if (frameToSync) {
+      const { PinNo, State } = frameToSync;
+      InterfacingService.Signal(PinNo, State === 1);
+    }
   }
 }
 

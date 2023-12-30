@@ -8,15 +8,16 @@ import {
 import { FrameUtils } from '../../utilities';
 import { KeyTriggerMap } from '../../../components/media-config-manager/data-provider/types';
 import { useMediaStatus } from '../../../components/media-player';
-import { TrackSyncWorker } from '../../workers';
+import { ManualSyncWorker, TrackSyncWorker } from '../../workers';
 
 const useConfigManager = () => {
   const [keyMapping, setKeyMapping] = useState<KeyTriggerMap>({});
   const [tracks, setTracks] = useState<{ [pinNo: number]: KeyFrame[] }>({});
 
   const { Duration, CurrentTime, IsPlaying } = useMediaStatus();
-
   const syncWorkerRef = useRef(new TrackSyncWorker());
+  const manualSyncWorkerRef = useRef(new ManualSyncWorker());
+
   const currentTimeRef = useRef(CurrentTime);
   useEffect(() => {
     if (IsPlaying) {
@@ -98,7 +99,7 @@ const useConfigManager = () => {
     };
 
     await window.InvokeApi('Tracks:Insert', requestBody);
-    // applySavedTracks();
+    applySavedTracks();
   }, [keyMapping, tracks, Duration]);
 
   const onKeyDown = useCallback(
@@ -112,6 +113,7 @@ const useConfigManager = () => {
       setTracks((prev) => {
         const updated = { ...prev };
         for (const trigger of triggers) {
+          manualSyncWorkerRef.current.Sync(trigger, true);
           updated[trigger] = FrameUtils.StartFrame(
             currentTimeRef.current,
             updated[trigger] ?? []
@@ -135,7 +137,10 @@ const useConfigManager = () => {
         const updated = { ...prev };
         for (const trigger of triggers) {
           if (updated[trigger]) {
-            updated[trigger] = FrameUtils.EndFrame(current, updated[trigger]);
+            manualSyncWorkerRef.current.Sync(trigger, false);
+            updated[trigger] = FrameUtils.MergeFrames(
+              FrameUtils.EndFrame(current, updated[trigger])
+            ).map((x) => ({ ...x, isNone: false }));
           }
         }
         return updated;

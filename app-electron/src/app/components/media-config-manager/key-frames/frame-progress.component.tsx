@@ -13,4 +13,6 @@ const FrameProgress: FC<FrameProgressProps> = ({ className, width }) => {
   return <div ref={barRef} className={`progress-bar ${className ?? ''}`}></div>;
 };
 
-export default memo(FrameProgress);
+export default memo(FrameProgress, (prev, curr) => {
+  return prev.width === curr.width && prev.className === curr.className;
+});

@@ -64,17 +64,17 @@ function findMissingRanges(start: number, end: number, ranges: KeyFrame[]) {
 }
 
 function reArrageFrames(frames: KeyFrame[], maxEnd: number) {
-  const merged: KeyFrame[] = mergeRanges(frames).map((x) => ({
-    ...x,
-    isNone: false,
-  }));
+  // const merged: KeyFrame[] = mergeRanges(frames).map((x) => ({
+  //   ...x,
+  //   isNone: false,
+  // }));
 
-  const missing: KeyFrame[] = findMissingRanges(0, maxEnd, merged).map((x) => ({
+  const missing: KeyFrame[] = findMissingRanges(0, maxEnd, frames).map((x) => ({
     ...x,
     isNone: true,
   }));
 
-  const rearranged = [...merged, ...missing];
+  const rearranged = [...frames, ...missing];
 
   return sortByStartTime(rearranged);
 }
@@ -110,6 +110,7 @@ const FrameUtils = {
   StartFrame: startFrame,
   EndFrame: endFrame,
   ReArrangeFrames: reArrageFrames,
+  MergeFrames: mergeRanges,
   Sort: sortByStartTime,
   GetCurrentFrame: findRangeBinarySearch,
 };
