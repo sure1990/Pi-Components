@@ -4,7 +4,7 @@ import { ShiftRegisterDriver } from "./shift-register.driver";
 
 const initialize = async () => {
     const mq = new MessageQ('amqp://vrtdesigns-mq');
-    await mq.CreateChannel('amq.direct');
+    await mq.CreateChannel();
     return mq;
 }
 
