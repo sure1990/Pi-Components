@@ -1,6 +1,6 @@
 {
-  "name": "mf-client",
-  "productName": "mf-client",
+  "name": "vrt-designs",
+  "productName": "VRT Designs",
   "version": "1.0.0",
   "description": "My Electron application description",
   "main": ".webpack/main",

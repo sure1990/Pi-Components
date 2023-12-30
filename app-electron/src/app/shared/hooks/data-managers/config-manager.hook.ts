@@ -8,26 +8,25 @@ import {
 import { FrameUtils } from '../../utilities';
 import { KeyTriggerMap } from '../../../components/media-config-manager/data-provider/types';
 import { useMediaStatus } from '../../../components/media-player';
-import { ManualSyncWorker, TrackSyncWorker } from '../../workers';
-
+import { TrackSyncWorker } from '../../workers';
+import { InterfacingService } from '../../services';
+const syncWorkerRef = new TrackSyncWorker();
 const useConfigManager = () => {
   const [keyMapping, setKeyMapping] = useState<KeyTriggerMap>({});
   const [tracks, setTracks] = useState<{ [pinNo: number]: KeyFrame[] }>({});
 
   const { Duration, CurrentTime, IsPlaying } = useMediaStatus();
-  const syncWorkerRef = useRef(new TrackSyncWorker());
-  const manualSyncWorkerRef = useRef(new ManualSyncWorker());
-
   const currentTimeRef = useRef(CurrentTime);
+
   useEffect(() => {
     if (IsPlaying) {
-      syncWorkerRef.current.Sync(CurrentTime);
+      syncWorkerRef.Sync(CurrentTime);
     }
     currentTimeRef.current = CurrentTime;
   }, [CurrentTime, IsPlaying]);
 
   useEffect(() => {
-    if (!IsPlaying) syncWorkerRef.current.Reset();
+    if (!IsPlaying) syncWorkerRef.Reset();
   }, [IsPlaying]);
 
   useEffect(() => {
@@ -53,7 +52,7 @@ const useConfigManager = () => {
       'Tracks:Fetch',
       1
     );
-    syncWorkerRef.current.Init(savedTracks);
+    syncWorkerRef.Init(savedTracks);
 
     let initialKeys: { [key: number]: KeyFrame[] } = {};
     Object.keys(keyMapping)
@@ -113,7 +112,7 @@ const useConfigManager = () => {
       setTracks((prev) => {
         const updated = { ...prev };
         for (const trigger of triggers) {
-          manualSyncWorkerRef.current.Sync(trigger, true);
+          InterfacingService.Signal(trigger, true);
           updated[trigger] = FrameUtils.StartFrame(
             currentTimeRef.current,
             updated[trigger] ?? []
@@ -137,7 +136,7 @@ const useConfigManager = () => {
         const updated = { ...prev };
         for (const trigger of triggers) {
           if (updated[trigger]) {
-            manualSyncWorkerRef.current.Sync(trigger, false);
+            InterfacingService.Signal(trigger, false);
             updated[trigger] = FrameUtils.MergeFrames(
               FrameUtils.EndFrame(current, updated[trigger])
             ).map((x) => ({ ...x, isNone: false }));

@@ -7,6 +7,7 @@ declare global {
       method: APIMethods,
       body?: APIRequestBody
     ) => Promise<TResponse>;
+    SendSignal: (msg: string) => void;
   }
 }
 import { APIRequestBody, APIMethods } from './shared/types';

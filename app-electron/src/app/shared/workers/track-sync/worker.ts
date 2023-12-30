@@ -46,7 +46,7 @@ async function syncPerPin(pinNo: number, time: number) {
     const frameToSync = tracks[frameToSyncIndex];
     if (frameToSync) {
       const { PinNo, State } = frameToSync;
-      InterfacingService.Signal(PinNo, State === 1);
+      self.postMessage({ PinNo, State: State === 1 });
     }
   }
 }

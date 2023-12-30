@@ -1,4 +1,5 @@
 import { SavedTracks } from '../../../../shared/types';
+import { InterfacingService } from '../../services';
 import { TrackSyncActionsEnum } from './types';
 
 export class TrackSyncWorker {
@@ -7,6 +8,10 @@ export class TrackSyncWorker {
     this.worker = new Worker(new URL('./worker.ts', import.meta.url), {
       name: 'TrackSyncWorker',
     });
+    this.worker.onmessage = (event) => {
+      const { PinNo, State } = event.data;
+      InterfacingService.Signal(PinNo, State);
+    };
   }
 
   Init(tracks: SavedTracks[]) {
