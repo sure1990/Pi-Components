@@ -1,5 +1,6 @@
-import { ByteCollection } from "../../utils/byte";
-import { ShiftRegisters } from "../../utils/shift-register";
+import { ByteCollection } from '../../utils/byte';
+import { ShiftRegisters } from '../../utils/shift-register';
+import config from '../../config/consumer.config.json';
 
 type Group = {
   sr: ShiftRegisters;
@@ -9,47 +10,54 @@ type Group = {
 const createMapping = (registerCount: number): { [key: string]: Group } => {
   return {
     Group_1: {
-      sr: createRegister(13, 19, 26, registerCount),
+      sr: createRegister('Group_1', registerCount),
       bytes: createByteCollection(registerCount),
     },
     Group_2: {
-      sr: createRegister(0, 5, 6, registerCount),
+      sr: createRegister('Group_2', registerCount),
       bytes: createByteCollection(registerCount),
     },
     Group_3: {
-      sr: createRegister(10, 9, 11, registerCount),
+      sr: createRegister('Group_3', registerCount),
       bytes: createByteCollection(registerCount),
     },
     Group_4: {
-      sr: createRegister(17, 27, 22, registerCount),
+      sr: createRegister('Group_4', registerCount),
       bytes: createByteCollection(registerCount),
     },
     Group_5: {
-      sr: createRegister(16, 20, 21, registerCount),
+      sr: createRegister('Group_5', registerCount),
       bytes: createByteCollection(registerCount),
     },
     Group_6: {
-      sr: createRegister(8, 7, 1, registerCount),
+      sr: createRegister('Group_6', registerCount),
       bytes: createByteCollection(registerCount),
     },
     Group_7: {
-      sr: createRegister(23, 24, 25, registerCount),
+      sr: createRegister('Group_7', registerCount),
       bytes: createByteCollection(registerCount),
     },
-    // Group_8: {
-    //   sr: createRegister(14, 15, 18, registerCount),
-    //   bytes: createByteCollection(registerCount),
-    // },
+    Group_8: {
+      sr: createRegister('Group_8', registerCount),
+      bytes: createByteCollection(registerCount),
+    },
   };
 };
 
 const createRegister = (
-  dataPin: number,
-  clockPin: number,
-  latchPin: number,
+  groupName:
+    | 'Group_8'
+    | 'Group_7'
+    | 'Group_6'
+    | 'Group_5'
+    | 'Group_4'
+    | 'Group_3'
+    | 'Group_2'
+    | 'Group_1',
   registerCount: number
 ) => {
-  return new ShiftRegisters(dataPin, clockPin, latchPin, registerCount);
+  const { data, latch, clock } = config.Interface[groupName];
+  return new ShiftRegisters(data, clock, latch, registerCount);
 };
 
 const createByteCollection = (byteSize: number) => {

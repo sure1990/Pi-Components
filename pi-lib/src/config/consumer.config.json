@@ -34,6 +34,11 @@
       "data": 23,
       "clock": 24,
       "latch": 25
+    },
+    "Group_8": {
+      "data": 8,
+      "clock": 7,
+      "latch": 1
     }
   }
 }
