@@ -1,9 +1,7 @@
-class _InterfacingService {
-  Signal(pinNo: number, state: boolean) {
-    window.SendSignal(`${pinNo}|${state ? '1' : '0'}`);
-  }
+function Signal(pinNo: number, state: boolean) {
+  window.SendSignal(`${pinNo}|${state ? '1' : '0'}`);
 }
 
-const InterfacingService = new _InterfacingService();
+const InterfacingService = { Signal };
 
 export default InterfacingService;

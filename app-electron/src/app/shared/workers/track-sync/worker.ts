@@ -28,10 +28,7 @@ function init(tracks: SavedTracks[]) {
       [curr.PinNo]: [...(prev[curr.PinNo] ?? []), { ...curr }],
     };
   }, _tracks);
-  _syncedTracks = Object.keys(_tracks).reduce((prev, curr) => {
-    return { ...prev, [+curr]: [] };
-  }, _syncedTracks);
-  _syncedTracksReset = { ..._syncedTracks };
+  reset();
 }
 
 function sync(time: number) {
@@ -53,5 +50,7 @@ async function syncPerPin(pinNo: number, time: number) {
 }
 
 function reset() {
-  _syncedTracks = { ..._syncedTracksReset };
+  _syncedTracks = Object.keys(_tracks).reduce((prev, curr) => {
+    return { ...prev, [+curr]: [] };
+  }, _syncedTracks);
 }
