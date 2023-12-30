@@ -12,6 +12,7 @@ import { useMediaStatus } from '../../../components/media-player';
 const useConfigManager = () => {
   const [keyMapping, setKeyMapping] = useState<KeyTriggerMap>({});
   const [tracks, setTracks] = useState<{ [pinNo: number]: KeyFrame[] }>({});
+  const savedTrackRef = useRef<{ [pinNo: number]: KeyFrame[] }>({});
   const { Duration, CurrentTime } = useMediaStatus();
 
   const currentTimeRef = useRef(CurrentTime);
@@ -58,7 +59,7 @@ const useConfigManager = () => {
             })),
         };
       });
-
+    savedTrackRef.current = initialKeys;
     setTracks(initialKeys);
   }, [keyMapping]);
 
@@ -69,21 +70,26 @@ const useConfigManager = () => {
   const saveTracks = useCallback(async () => {
     const requestBody: InsertTracksRequest = {
       MusicId: 1,
-      Tracks: Object.keys(frames)
-        .filter((k) => frames[+k].length > 0)
+      Tracks: Object.keys(tracks)
+        .map((x) => +x)
+        .filter((k) => tracks[k].length > 0)
         .map((k) => {
           return {
-            TriggerId: keyMapping[+k][0].TriggerId,
-            Frames: FrameUtils.ReArrangeFrames(tracks[+k], Duration).map(
-              (x) => ({ Start: x.start, End: x.end, State: !x.isNone })
+            TriggerId: keyMapping[k][0].TriggerId,
+            Frames: FrameUtils.ReArrangeFrames(tracks[k], Duration).map(
+              (x) => ({
+                Start: x.start,
+                End: x.end,
+                State: !x.isNone,
+              })
             ),
           };
         }),
     };
 
     await window.InvokeApi('Tracks:Insert', requestBody);
-    applySavedTracks();
-  }, [keyMapping]);
+    // applySavedTracks();
+  }, [keyMapping, tracks, Duration]);
 
   const onKeyDown = useCallback(
     (key: string) => {

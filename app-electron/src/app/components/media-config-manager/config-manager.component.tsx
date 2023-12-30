@@ -25,14 +25,15 @@ const ConfigManager = () => {
       <div className="row mt-3">
         <div className="col-md">
           {Object.keys(tracks)
-            .filter((k) => tracks[+k].length > 0)
+            .map((x) => +x)
+            .filter((k) => tracks[k].length > 0)
             .map((k) => {
-              const frames = tracks[+k];
+              const frames = tracks[k];
               return (
                 <KeyFrames
                   key={k}
                   frames={frames}
-                  map={+k}
+                  map={k}
                   max={Duration}
                   current={CurrentTime}
                 />
