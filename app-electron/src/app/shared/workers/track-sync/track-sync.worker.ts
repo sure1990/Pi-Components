@@ -32,5 +32,6 @@ export class TrackSyncWorker {
     this.worker.postMessage({
       action: TrackSyncActionsEnum.RESET,
     });
+    InterfacingService.Reset();
   }
 }

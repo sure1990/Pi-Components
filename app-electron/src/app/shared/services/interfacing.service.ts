@@ -2,6 +2,10 @@ function Signal(pinNo: number, state: boolean) {
   window.SendSignal(`${pinNo}|${state ? '1' : '0'}`);
 }
 
-const InterfacingService = { Signal };
+function Reset() {
+  window.SendSignal('RESET');
+}
+
+const InterfacingService = { Signal, Reset };
 
 export default InterfacingService;
