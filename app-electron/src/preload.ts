@@ -8,6 +8,8 @@ declare global {
       body?: APIRequestBody
     ) => Promise<TResponse>;
     SendSignal: (msg: string) => void;
+    ConnectToWs: () => void;
+    CloseWs: () => void;
   }
 }
 import { APIRequestBody, APIMethods } from './shared/types';

@@ -17,17 +17,18 @@ const useConfigManager = () => {
 
   const { Duration, CurrentTime, IsPlaying } = useMediaStatus();
   const currentTimeRef = useRef(CurrentTime);
-
+  useEffect(() => {
+    window.ConnectToWs();
+    return () => window.CloseWs();
+  }, []);
   useEffect(() => {
     if (IsPlaying) {
       syncWorkerRef.Sync(CurrentTime);
+    } else {
+      syncWorkerRef.Reset();
     }
     currentTimeRef.current = CurrentTime;
   }, [CurrentTime, IsPlaying]);
-
-  useEffect(() => {
-    if (!IsPlaying) syncWorkerRef.Reset();
-  }, [IsPlaying]);
 
   useEffect(() => {
     window.InvokeApi<KeyTrigger[]>('KeyMap:Select').then((x) => {

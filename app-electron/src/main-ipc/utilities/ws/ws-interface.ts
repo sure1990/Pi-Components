@@ -16,8 +16,18 @@ function connect() {
   };
 }
 
-connect();
+function close() {
+  connection.close();
+}
 
-const WSInterface = { Send: (msg: string) => connection.send(msg) };
+function send(msg: string) {
+  connection.send(msg);
+}
+
+const WSInterface = {
+  Connect: connect,
+  Close: close,
+  Send: send,
+};
 
 export default WSInterface;

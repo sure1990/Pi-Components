@@ -10,6 +10,14 @@ export default () => {
   ipcMain.on('hw-sync', (_, msg) => {
     WSInterface.Send(msg);
   });
+
+  ipcMain.on('hw-sync-init', () => {
+    WSInterface.Connect();
+  });
+
+  ipcMain.on('hw-sync-close', () => {
+    WSInterface.Close();
+  });
 };
 
 function initialize() {
