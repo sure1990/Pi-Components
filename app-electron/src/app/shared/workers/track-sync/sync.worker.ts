@@ -1,10 +1,9 @@
-import { SavedTracks } from '../../../../shared/types';
-import { FrameUtils } from '../../utilities';
-import { TrackSyncActionsEnum } from './types';
+import { SavedTracks } from "../../../../shared/types";
+import { FrameUtils } from "../../utilities";
+import { TrackSyncActionsEnum } from "./types";
 
 let _tracks: { [pinNo: number]: SavedTracks[] } = {};
 let _syncedTracks: { [pinNo: number]: number[] } = {};
-let _syncedTracksReset: { [pinNo: number]: number[] } = {};
 
 self.onmessage = (event) => {
   const { action, payload } = event.data;
@@ -50,6 +49,7 @@ async function syncPerPin(pinNo: number, time: number) {
 }
 
 function reset() {
+ 
   _syncedTracks = Object.keys(_tracks).reduce((prev, curr) => {
     return { ...prev, [+curr]: [] };
   }, _syncedTracks);
