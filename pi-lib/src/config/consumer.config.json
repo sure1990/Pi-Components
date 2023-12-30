@@ -1,3 +1,39 @@
 {
-    
+  "Interface": {
+    "Group_1": {
+      "data": 13,
+      "clock": 19,
+      "latch": 26
+    },
+    "Group_2": {
+      "data": 0,
+      "clock": 5,
+      "latch": 6
+    },
+    "Group_3": {
+      "data": 10,
+      "clock": 9,
+      "latch": 11
+    },
+    "Group_4": {
+      "data": 17,
+      "clock": 27,
+      "latch": 22
+    },
+    "Group_5": {
+      "data": 16,
+      "clock": 20,
+      "latch": 21
+    },
+    "Group_6": {
+      "data": 8,
+      "clock": 7,
+      "latch": 1
+    },
+    "Group_7": {
+      "data": 23,
+      "clock": 24,
+      "latch": 25
+    }
+  }
 }
