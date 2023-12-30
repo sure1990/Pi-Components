@@ -64,4 +64,4 @@ const createByteCollection = (byteSize: number) => {
   return new ByteCollection(byteSize);
 };
 
-export default createMapping(1);
+export default createMapping(2);
