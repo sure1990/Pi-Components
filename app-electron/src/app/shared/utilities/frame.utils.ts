@@ -1,5 +1,6 @@
 import { KeyFrame } from '../types';
 import { NumericUtils } from '.';
+import { SavedTracks } from '../../../shared/types';
 
 function startFrame(start: number, frames: KeyFrame[]) {
   return [...frames, { start, isNone: false }];
@@ -83,8 +84,8 @@ function sortByStartTime(frames: KeyFrame[]) {
 }
 
 function findRangeBinarySearch(
-  number: number,
-  ranges: KeyFrame[]
+  currentTime: number,
+  ranges: SavedTracks[]
 ): number | null {
   let left = 0;
   let right = ranges.length - 1;
@@ -93,9 +94,9 @@ function findRangeBinarySearch(
     const mid = Math.floor((left + right) / 2);
     const currentRange = ranges[mid];
 
-    if (number >= currentRange.start && number <= currentRange.end) {
+    if (currentTime >= currentRange.Start && currentTime <= currentRange.End) {
       return mid;
-    } else if (number < currentRange.start) {
+    } else if (currentTime < currentRange.Start) {
       right = mid - 1;
     } else {
       left = mid + 1;

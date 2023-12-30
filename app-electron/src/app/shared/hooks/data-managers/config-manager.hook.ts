@@ -12,7 +12,7 @@ import { useMediaStatus } from '../../../components/media-player';
 const useConfigManager = () => {
   const [keyMapping, setKeyMapping] = useState<KeyTriggerMap>({});
   const [tracks, setTracks] = useState<{ [pinNo: number]: KeyFrame[] }>({});
-  const savedTrackRef = useRef<{ [pinNo: number]: KeyFrame[] }>({});
+  const savedTrackRef = useRef<SavedTracks[]>([]);
   const { Duration, CurrentTime } = useMediaStatus();
 
   const currentTimeRef = useRef(CurrentTime);
@@ -43,7 +43,7 @@ const useConfigManager = () => {
       'Tracks:Fetch',
       1
     );
-
+    savedTrackRef.current = savedTracks;
     let initialKeys: { [key: number]: KeyFrame[] } = {};
     Object.keys(keyMapping)
       .map((x) => +x)
@@ -59,7 +59,7 @@ const useConfigManager = () => {
             })),
         };
       });
-    savedTrackRef.current = initialKeys;
+
     setTracks(initialKeys);
   }, [keyMapping]);
 
