@@ -1,9 +1,9 @@
-import { SavedTracks } from "../../../../shared/types";
-import { InterfacingService } from "../../services";
-import { TrackSyncActionsEnum } from "./types";
+import { SavedTracks } from '../../../../shared/types';
+import { InterfacingService } from '../../services';
+import { TrackSyncActionsEnum } from './types';
 
 // eslint-disable-next-line import/no-unresolved
-import SyncWorker from "worker-loader!./sync.worker.ts";
+import SyncWorker from 'worker-loader!./effect-sync.worker.ts';
 
 export class TrackSyncWorker {
   private worker: Worker;
@@ -25,16 +25,17 @@ export class TrackSyncWorker {
     });
   }
 
-  Sync(time: number) {
+  Sync() {
     this.worker.postMessage({
       action: TrackSyncActionsEnum.SYNC,
-      payload: time,
+      // payload: time,
     });
   }
 
-  Reset() {
+  Reset(time: number) {
     this.worker.postMessage({
       action: TrackSyncActionsEnum.RESET,
+      payload: time,
     });
     InterfacingService.Reset();
   }

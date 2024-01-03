@@ -22,13 +22,21 @@ const useConfigManager = () => {
     return () => window.CloseWs();
   }, []);
   useEffect(() => {
-    if (IsPlaying) {
-      syncWorkerRef.Sync(CurrentTime);
-    } else {
-      syncWorkerRef.Reset();
-    }
+    // if (IsPlaying) {
+    //   syncWorkerRef.Sync(CurrentTime);
+    // } else {
+    //   syncWorkerRef.Reset();
+    // }
     currentTimeRef.current = CurrentTime;
-  }, [CurrentTime, IsPlaying]);
+  }, [CurrentTime]);
+
+  useEffect(() => {
+    if (IsPlaying) syncWorkerRef.Sync();
+  }, [IsPlaying]);
+
+  useEffect(() => {
+    if (!IsPlaying) syncWorkerRef.Reset(CurrentTime);
+  }, [IsPlaying, CurrentTime]);
 
   useEffect(() => {
     window.InvokeApi<KeyTrigger[]>('KeyMap:Select').then((x) => {
