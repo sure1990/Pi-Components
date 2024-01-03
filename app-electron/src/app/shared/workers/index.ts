@@ -1,3 +1,3 @@
-import { TrackSyncWorker } from './track-sync/track-sync.worker';
+import { TrackSyncWorker } from './track-sync/track-sync-worker';
 
 export { TrackSyncWorker };
